@@ -85,8 +85,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     fileprivate var book: FRBook {
-        guard let readerContainer = readerContainer else { return FRBook() }
-        return readerContainer.book
+        return BookProvider.shared.currentBook
     }
 
     fileprivate var folioReader: FolioReader {
@@ -457,7 +456,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         // Configure the cell
         let resource = self.book.spine.spineReferences[indexPath.row].resource
-        guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
+        guard var html = String(data: resource.data, encoding: .utf8) else {
             return cell
         }
 
@@ -492,7 +491,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             html = modifiedHtmlContent
         }
 
-        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref).deletingLastPathComponent())
         return cell
     }
 

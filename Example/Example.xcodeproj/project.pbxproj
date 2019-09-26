@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13EEB9E592A80F9B0437B43C /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */; };
 		1A42C28D1C0E3882000F2137 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28C1C0E3882000F2137 /* AppDelegate.swift */; };
 		1A42C28F1C0E3882000F2137 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28E1C0E3882000F2137 /* ViewController.swift */; };
 		1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2901C0E3883000F2137 /* Main.storyboard */; };
@@ -34,16 +33,17 @@
 		3AAA8BA81E9BB94B00A47E5A /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B9F1E9BB94B00A47E5A /* The Silver Chair.epub */; };
 		3AAA8BA91E9BBFAF00A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		3AAA8BAA1E9BBFB700A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
+		50089BD3900B4C5F147DA605 /* libPods-MultipleInstance-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1172B0FAFA46998FF60DD57A /* libPods-MultipleInstance-Example.a */; };
 		63A0DDBB23395203009A5F02 /* accel_encrypted.epub in Resources */ = {isa = PBXBuildFile; fileRef = 63A0DDBA23395203009A5F02 /* accel_encrypted.epub */; };
 		6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		751F8CF61ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
 		751F8CF71ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
 		751F8CF81ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
-		C143E5BE0CD376A99AD08747 /* Pods_Storyboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */; };
+		799D82A94EB67C63F8C2D08E /* libPods-Storyboard-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFB940333928A5326F57925 /* libPods-Storyboard-Example.a */; };
+		80A57F5169C6BD01D56D18F3 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD22B3E1D7C0E1C6E8F5078 /* libPods-Example.a */; };
+		B2B732D4EC4A32830499B4F7 /* libPods-FolioReaderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D06F78AC2539FABA448AB23 /* libPods-FolioReaderTests.a */; };
 		CA10C1341C572A4B0049165D /* FolioReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA10C1331C572A4B0049165D /* FolioReaderTests.swift */; };
 		CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF233281C57E1F400CB930C /* SharingProviderTests.swift */; };
-		DB8597912791266AA602B5B1 /* Pods_FolioReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */; };
-		DEF42BA2DD4348929475052F /* Pods_MultipleInstance_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843E2EEC2F784021400961A9 /* Pods_MultipleInstance_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +58,8 @@
 
 /* Begin PBXFileReference section */
 		054F92EA4A92E2C8F69C82E1 /* Pods-MultipleInstance-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultipleInstance-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D06F78AC2539FABA448AB23 /* libPods-FolioReaderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FolioReaderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1172B0FAFA46998FF60DD57A /* libPods-MultipleInstance-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MultipleInstance-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A42C2891C0E3882000F2137 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A42C28C1C0E3882000F2137 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A42C28E1C0E3882000F2137 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,7 +67,6 @@
 		1A42C2981C0E3883000F2137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A42C2A11C0E3A8D000F2137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1D4790507F22E69298DC06E1 /* Pods-StoryboardExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample.release.xcconfig"; sourceTree = "<group>"; };
-		27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FolioReaderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StoryboardExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A8E86F21E9F80CB00CD844C /* CodeExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeExampleViewController.swift; sourceTree = "<group>"; };
 		3A8E86F41E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
@@ -86,13 +86,13 @@
 		3AAA8B9E1E9BB94B00A47E5A /* The Adventures Of Sherlock Holmes - Adventure I.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Adventures Of Sherlock Holmes - Adventure I.epub"; sourceTree = "<group>"; };
 		3AAA8B9F1E9BB94B00A47E5A /* The Silver Chair.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Silver Chair.epub"; sourceTree = "<group>"; };
 		3CE90B4095B5C7E6237EEBDD /* Pods-FolioReaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.debug.xcconfig"; sourceTree = "<group>"; };
-		44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Storyboard_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BFB940333928A5326F57925 /* libPods-Storyboard-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Storyboard-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C8EADB52E1D834750CD7D23 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		63A0DDBA23395203009A5F02 /* accel_encrypted.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = accel_encrypted.epub; sourceTree = "<group>"; };
 		6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		751CA93A8AFDADE43FB75F6B /* Pods-Storyboard-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storyboard-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		751F8CF51ECD20110050A2CF /* Epub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Epub.swift; sourceTree = "<group>"; };
-		843E2EEC2F784021400961A9 /* Pods_MultipleInstance_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MultipleInstance_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AD22B3E1D7C0E1C6E8F5078 /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E1BE6465444C567F5D1B8E6 /* Pods-FolioReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.release.xcconfig"; sourceTree = "<group>"; };
 		C4F8C36D75B15390CDB07BF1 /* Pods-MultipleInstance-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultipleInstance-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example.release.xcconfig"; sourceTree = "<group>"; };
 		C860A0C690322C01443DBA0C /* Pods-Storyboard-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storyboard-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */,
-				13EEB9E592A80F9B0437B43C /* Pods_Example.framework in Frameworks */,
+				80A57F5169C6BD01D56D18F3 /* libPods-Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AAA8BAA1E9BBFB700A47E5A /* MediaPlayer.framework in Frameworks */,
-				DEF42BA2DD4348929475052F /* Pods_MultipleInstance_Example.framework in Frameworks */,
+				50089BD3900B4C5F147DA605 /* libPods-MultipleInstance-Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB8597912791266AA602B5B1 /* Pods_FolioReaderTests.framework in Frameworks */,
+				B2B732D4EC4A32830499B4F7 /* libPods-FolioReaderTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AAA8BA91E9BBFAF00A47E5A /* MediaPlayer.framework in Frameworks */,
-				C143E5BE0CD376A99AD08747 /* Pods_Storyboard_Example.framework in Frameworks */,
+				799D82A94EB67C63F8C2D08E /* libPods-Storyboard-Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,11 +275,11 @@
 			isa = PBXGroup;
 			children = (
 				6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */,
-				0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */,
-				27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */,
 				318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */,
-				843E2EEC2F784021400961A9 /* Pods_MultipleInstance_Example.framework */,
-				44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */,
+				8AD22B3E1D7C0E1C6E8F5078 /* libPods-Example.a */,
+				0D06F78AC2539FABA448AB23 /* libPods-FolioReaderTests.a */,
+				1172B0FAFA46998FF60DD57A /* libPods-MultipleInstance-Example.a */,
+				4BFB940333928A5326F57925 /* libPods-Storyboard-Example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 				1A42C2851C0E3882000F2137 /* Sources */,
 				1A42C2861C0E3882000F2137 /* Frameworks */,
 				1A42C2871C0E3882000F2137 /* Resources */,
-				4521900C899CED51BB10949C /* [CP] Embed Pods Frameworks */,
+				83044CBEDA3F655BC56DAB9D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -314,7 +314,7 @@
 				3AAA8B691E9BB78B00A47E5A /* Sources */,
 				3AAA8B6C1E9BB78B00A47E5A /* Frameworks */,
 				3AAA8B6E1E9BB78B00A47E5A /* Resources */,
-				3AAA8B751E9BB78B00A47E5A /* [CP] Embed Pods Frameworks */,
+				8B9E13CACB9BAB38977D69BA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -334,8 +334,7 @@
 				CA10C12D1C572A4B0049165D /* Sources */,
 				CA10C12E1C572A4B0049165D /* Frameworks */,
 				CA10C12F1C572A4B0049165D /* Resources */,
-				C1392FF51E4FD15EBB5AA8DD /* [CP] Embed Pods Frameworks */,
-				E82F486563C1547E0775A59F /* 📦 Embed Pods Frameworks */,
+				B14C19B0C208936B30A1F35D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -355,7 +354,7 @@
 				D120665F1D65FABD006E1D18 /* Sources */,
 				D12066601D65FABD006E1D18 /* Frameworks */,
 				D12066611D65FABD006E1D18 /* Resources */,
-				ACD2A7368ACAFB17422DAA7F /* [CP] Embed Pods Frameworks */,
+				0C6623702E73E53EC42307FD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -493,6 +492,60 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		0C6623702E73E53EC42307FD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example-resources.sh",
+				"${PODS_ROOT}/../../Source/Resources/Bridge.js",
+				"${PODS_ROOT}/../../Source/Resources/Style.css",
+				"${PODS_ROOT}/../../Source/Resources/Images.xcassets",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Bold.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-BoldItalic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Italic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Regular.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Regular.ttf",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Bridge.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Style.css",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Bold.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-BoldItalic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Italic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Regular.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Regular.ttf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1D8126CC73301F2413345444 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,143 +597,166 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3AAA8B751E9BB78B00A47E5A /* [CP] Embed Pods Frameworks */ = {
+		83044CBEDA3F655BC56DAB9D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AEXML/AEXML.framework",
-				"${BUILT_PRODUCTS_DIR}/BitByteData/BitByteData.framework",
-				"${BUILT_PRODUCTS_DIR}/FolioReaderKit/FolioReaderKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FontBlaster/FontBlaster.framework",
-				"${BUILT_PRODUCTS_DIR}/MenuItemKit/MenuItemKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SWCompression/SWCompression.framework",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh",
+				"${PODS_ROOT}/../../Source/Resources/Bridge.js",
+				"${PODS_ROOT}/../../Source/Resources/Style.css",
+				"${PODS_ROOT}/../../Source/Resources/Images.xcassets",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Bold.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-BoldItalic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Italic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Regular.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Regular.ttf",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AEXML.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BitByteData.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FolioReaderKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontBlaster.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MenuItemKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWCompression.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Bridge.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Style.css",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Bold.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-BoldItalic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Italic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Regular.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Regular.ttf",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4521900C899CED51BB10949C /* [CP] Embed Pods Frameworks */ = {
+		8B9E13CACB9BAB38977D69BA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AEXML/AEXML.framework",
-				"${BUILT_PRODUCTS_DIR}/BitByteData/BitByteData.framework",
-				"${BUILT_PRODUCTS_DIR}/FolioReaderKit/FolioReaderKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FontBlaster/FontBlaster.framework",
-				"${BUILT_PRODUCTS_DIR}/MenuItemKit/MenuItemKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SWCompression/SWCompression.framework",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example-resources.sh",
+				"${PODS_ROOT}/../../Source/Resources/Bridge.js",
+				"${PODS_ROOT}/../../Source/Resources/Style.css",
+				"${PODS_ROOT}/../../Source/Resources/Images.xcassets",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Bold.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-BoldItalic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Italic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Regular.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Regular.ttf",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AEXML.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BitByteData.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FolioReaderKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontBlaster.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MenuItemKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWCompression.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Bridge.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Style.css",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Bold.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-BoldItalic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Italic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Regular.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Regular.ttf",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ACD2A7368ACAFB17422DAA7F /* [CP] Embed Pods Frameworks */ = {
+		B14C19B0C208936B30A1F35D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AEXML/AEXML.framework",
-				"${BUILT_PRODUCTS_DIR}/BitByteData/BitByteData.framework",
-				"${BUILT_PRODUCTS_DIR}/FolioReaderKit/FolioReaderKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FontBlaster/FontBlaster.framework",
-				"${BUILT_PRODUCTS_DIR}/MenuItemKit/MenuItemKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SWCompression/SWCompression.framework",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-resources.sh",
+				"${PODS_ROOT}/../../Source/Resources/Bridge.js",
+				"${PODS_ROOT}/../../Source/Resources/Style.css",
+				"${PODS_ROOT}/../../Source/Resources/Images.xcassets",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Bold.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-BoldItalic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Italic.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Andada/Andada-Regular.otf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lato/Lato-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Lora/Lora-Regular.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Bold.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-BoldItalic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Italic.ttf",
+				"${PODS_ROOT}/../../Source/Resources/Fonts/Raleway/Raleway-Regular.ttf",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AEXML.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BitByteData.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FolioReaderKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontBlaster.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MenuItemKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWCompression.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Bridge.js",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Style.css",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Bold.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-BoldItalic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Italic.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Andada-Regular.otf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lato-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lora-Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Bold.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-BoldItalic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Italic.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Raleway-Regular.ttf",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C1392FF51E4FD15EBB5AA8DD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AEXML/AEXML.framework",
-				"${BUILT_PRODUCTS_DIR}/BitByteData/BitByteData.framework",
-				"${BUILT_PRODUCTS_DIR}/FolioReaderKit/FolioReaderKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FontBlaster/FontBlaster.framework",
-				"${BUILT_PRODUCTS_DIR}/MenuItemKit/MenuItemKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SWCompression/SWCompression.framework",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AEXML.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BitByteData.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FolioReaderKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontBlaster.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MenuItemKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWCompression.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E82F486563C1547E0775A59F /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E8C32EEE8DF6A549273237C6 /* [CP] Check Pods Manifest.lock */ = {

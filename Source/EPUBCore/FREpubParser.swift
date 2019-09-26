@@ -8,7 +8,6 @@
 
 import UIKit
 import AEXML
-import Zip
 import SWCompression
 
 class FREpubParser: NSObject {

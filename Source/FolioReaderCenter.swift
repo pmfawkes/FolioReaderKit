@@ -992,7 +992,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
         }
-        search(book.flatTableOfContents)
+        search(book.flatTableOfContents ?? [])
 
         return foundResource
     }

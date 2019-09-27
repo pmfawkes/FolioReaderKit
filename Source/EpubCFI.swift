@@ -46,7 +46,7 @@ public struct CFI: Codable {
     }
     
     var standardizedFormat: String {
-        return nodes.reduce("", { result, node in result + "/\(node.index)" })
+        return "epubcfi(" + nodes.reduce("", { result, node in result + "/\(node.index)" }) + ")"
     }
 }
 
@@ -89,7 +89,7 @@ class EpubCFI {
     /// - Returns: return the CFI structure if parses fine; nil if fails
     static func parse(cfi: String) -> CFI? {
         // cfi format: #epubcfi(...)
-        guard cfi.starts(with: "#epubcfi("),
+        guard cfi.starts(with: "epubcfi("),
             let startIndex = cfi.firstIndex(of: "("),
             let endIndex = cfi.firstIndex(of: ")"), startIndex < endIndex else {
                 print("not a valid EPUB CFI format")

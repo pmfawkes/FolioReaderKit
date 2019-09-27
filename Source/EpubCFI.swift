@@ -45,7 +45,7 @@ public struct CFI: Codable {
         return nodes[2..<nodes.count].map { $0.index.toDOMIndex }
     }
     
-    var standardizedFormat: String {
+    public var standardizedFormat: String {
         return "epubcfi(" + nodes.reduce("", { result, node in result + "/\(node.index)" }) + ")"
     }
 }

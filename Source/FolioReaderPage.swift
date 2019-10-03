@@ -34,6 +34,13 @@ import JavaScriptCore
      - parameter recognizer: The tap recognizer
      */
     @objc optional func pageTap(_ recognizer: UITapGestureRecognizer)
+    
+    /**
+     The delegate assignee is responsible to provide the user CFI information.
+     If not, folioReader uses its local location tracking data.
+     
+     */
+    @objc optional func getUserCFI(completionHandler: @escaping (String?) -> Void )
 }
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {

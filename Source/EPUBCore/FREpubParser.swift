@@ -161,7 +161,10 @@ class FREpubParser: NSObject {
         
         // Parse and save each "manifest item"
         xmlDoc.root["manifest"]["item"].all?.forEach { item in
-            guard let entry = self.bookZipEntries.first(where: { $0.info.name.lastPathComponent == item.attributes["href"] }) else { return }
+            guard let href = item.attributes["href"], let entry = self.bookZipEntries.first(where: { $0.info.name.contains(href) }) else {
+                return
+                
+            }
             let resource = FRResource()
             resource.id = item.attributes["id"]
             resource.properties = item.attributes["properties"]

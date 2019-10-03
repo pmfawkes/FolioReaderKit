@@ -87,24 +87,21 @@ class FolioReaderPageIndicator: UIView {
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        let readerCenter = folioReader.readerCenter
-        let epub = readerCenter?.book
+        let epub = folioReader.readerCenter?.book
         //grab all html items and save in array/object
-        guard let allChapterResouces = epub?.spine.spineReferences else {
+        guard let allChapterResources = epub?.spine.spineReferences else {
             return
         }
         //sum the size of all chapters
-        let totalLength = allChapterResouces.reduce(0) { (result: Int, currentSpine: Spine) -> Int in
-            guard var html = String(data: currentSpine.resource.data, encoding: .utf8) else {
-                return 0
-            }
-            return result + html.count
+        let totalLength = allChapterResources.reduce(0) { (result: Int, currentSpine: Spine) -> Int in
+            let html = String(data: currentSpine.resource.data, encoding: .utf8)
+            return result + (html?.count ?? 0)
         }
         //grab current chapter index
-        guard let currentChapterGivenPage = readerCenter?.currentPage,let currentChapterIndex = currentChapterGivenPage.pageNumber else {
+        guard let currentChapterGivenPage = folioReader.readerCenter?.currentPage, let currentChapterIndex = currentChapterGivenPage.pageNumber else {
             return
         }
-        //sum the size of all chapters leading up to the current chapter if your on chapter one the some should be 0
+        //sum the size of all chapters leading up to the current chapter if you're on chapter one the sum should be 0
         var sum = 0.0
         //for loop to begin summing current progress
         for i in 0..<(currentChapterIndex - 1) {
@@ -124,11 +121,11 @@ class FolioReaderPageIndicator: UIView {
             return
         }
         
-        guard  let currentCHapterSize = String(data: htmlData , encoding: .utf8)?.count else {
+        guard  let currentChapterSize = String(data: htmlData , encoding: .utf8)?.count else {
             return
         }
         
-        let chatperPercentage = Double(currentCHapterSize) / Double(totalLength)
+        let chatperPercentage = Double(currentChapterSize) / Double(totalLength)
         
         let pagePercentage = (chatperPercentage / Double(totalPages))
         

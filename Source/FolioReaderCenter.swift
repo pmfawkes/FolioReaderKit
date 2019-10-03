@@ -845,11 +845,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     
     public func getCurrentPageProgress() -> Float {
         guard let page = currentPage else { return 0 }
-        let epub = book
-        print(page.pageNumber)
-        print(epub.spine.spineReferences.count)
-        print(epub.spine.spineReferences[page.pageNumber].resource.fullHref)
-
         
         let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
         let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0

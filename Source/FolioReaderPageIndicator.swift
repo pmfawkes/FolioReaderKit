@@ -87,23 +87,52 @@ class FolioReaderPageIndicator: UIView {
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
-
-        if pagesRemaining == 1 {
-            pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
-        } else {
-            pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
+        let readerCenter = folioReader.readerCenter
+        let epub = readerCenter?.book
+        //grab all html items and save in array/object
+        guard let allChapterResouces = epub?.spine.spineReferences else {
+            return
         }
-
-        let minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
-        if minutesRemaining > 1 {
-            minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
-        } else if minutesRemaining == 1 {
-            minutesLabel.text = self.readerConfig.localizedReaderOneMinute+" ·"
-        } else {
-            minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
+        //sum the size of all chapters
+        let totalLength = allChapterResouces.reduce(0) { (result: Int, currentSpine: Spine) -> Int in
+            guard var html = String(data: currentSpine.resource.data, encoding: .utf8) else {
+                return 0
+            }
+            return result + html.count
         }
+        //grab current chapter index
+        guard let currentChapterGivenPage = readerCenter?.currentPage,let currentChapterIndex = currentChapterGivenPage.pageNumber else {
+            return
+        }
+        //sum the size of all chapters leading up to the current chapter if your on chapter one the some should be 0
+        var sum = 0.0
+        //for loop to begin summing current progress
+        for i in 0..<(currentChapterIndex - 1) {
+            guard let currentResouce = epub?.spine.spineReferences[i].resource.data else {
+                return
+            }
+            guard var html = String(data: currentResouce, encoding: .utf8) else {
+                return
+            }
+            sum += Double(html.count)
+        }
+        //percentage of current chapter which shows each chapter contributes to the book
+        let totalProgressGivenCurrentChapter = (sum / Double(totalLength))
+        // percentage of each page in relation to its chapter which will show what each page in chapter contributes to the book
+        let pagePercentage = (totalProgressGivenCurrentChapter / Double(totalPages))
+        //will show current progress in book
+        let currentProgress = totalProgressGivenCurrentChapter + (Double(page) * pagePercentage)
+
+        let percentFormatter = NumberFormatter()
+        percentFormatter.numberStyle = NumberFormatter.Style.percent
+        percentFormatter.multiplier = 1
+        percentFormatter.minimumFractionDigits = 1
+        percentFormatter.maximumFractionDigits = 2
         
+        guard let percentAsString = percentFormatter.string(for: currentProgress * 100.0)else {
+            return
+        }
+        pagesLabel.text = "\(percentAsString) of " + self.readerConfig.localizedPercentageOfBookCompleted
         reloadView(updateShadow: false)
     }
 }

@@ -118,9 +118,20 @@ class FolioReaderPageIndicator: UIView {
         }
         //percentage of current chapter which shows each chapter contributes to the book
         let totalProgressGivenCurrentChapter = (sum / Double(totalLength))
-        // percentage of each page in relation to its chapter which will show what each page in chapter contributes to the book
-        let pagePercentage = (totalProgressGivenCurrentChapter / Double(totalPages))
-        //will show current progress in book
+        
+        
+        guard let htmlData = epub?.spine.spineReferences[currentChapterIndex - 1].resource.data else {
+            return
+        }
+        
+        guard  let currentCHapterSize = String(data: htmlData , encoding: .utf8)?.count else {
+            return
+        }
+        
+        let chatperPercentage = Double(currentCHapterSize) / Double(totalLength)
+        
+        let pagePercentage = (chatperPercentage / Double(totalPages))
+        
         let currentProgress = totalProgressGivenCurrentChapter + (Double(page) * pagePercentage)
 
         let percentFormatter = NumberFormatter()

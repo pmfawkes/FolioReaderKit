@@ -155,23 +155,21 @@ open class FolioReaderContainer: UIViewController {
             return
         }
 
-        DispatchQueue.global(qos: .userInitiated).async {
-
+         DispatchQueue.main.async {
+            
             do {
                 let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath, key: self.decryptionKey)
                 self.folioReader.isReaderOpen = true
                 BookProvider.shared.currentBook = parsedBook
-
+                
                 // Reload data
-                DispatchQueue.main.async {
-                    // Add audio player if needed
-                    if BookProvider.shared.currentBook.hasAudio || self.readerConfig.enableTTS {
-                        self.addAudioPlayer()
-                    }
-                    self.centerViewController?.reloadData()
-                    self.folioReader.isReaderReady = true
-                    self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: BookProvider.shared.currentBook)
+                // Add audio player if needed
+                if BookProvider.shared.currentBook.hasAudio || self.readerConfig.enableTTS {
+                    self.addAudioPlayer()
                 }
+                self.centerViewController?.reloadData()
+                self.folioReader.isReaderReady = true
+                self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: BookProvider.shared.currentBook)
             } catch {
                 self.errorOnLoad = true
                 self.alert(message: error.localizedDescription)

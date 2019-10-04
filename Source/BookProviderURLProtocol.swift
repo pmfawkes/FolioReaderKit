@@ -11,7 +11,7 @@ import Foundation
 final class BookProviderURLProtocol: URLProtocol {
     
     override class func canInit(with request: URLRequest) -> Bool {
-        print("URLProtocol intercepts: \(request)")
+//        print("URLProtocol intercepts: \(request)")
         if let url = request.url,
             !url.hasDirectoryPath,
             url.absoluteString.hasPrefix( BookProvider.shared.currentBook.baseURL.absoluteString) {
@@ -25,7 +25,7 @@ final class BookProviderURLProtocol: URLProtocol {
     }
     
     override func startLoading() {
-        print("start loading: \(request.url)")
+//        print("start loading: \(request.url)")
         guard let url = request.url else {
             client?.urlProtocol(self, didFailWithError: BookProviderURLProtocolError.urlNotExist)
             return

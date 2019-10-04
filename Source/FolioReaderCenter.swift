@@ -1277,7 +1277,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                         
                         // TODO: use local DB and call API to store the CFI data
                         folioReader.savedPositionForCurrentBook = cfi
-                        print(cfi.standardizedFormat)
+                        pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
                     }
                 }
                 
@@ -1454,8 +1454,8 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 updateCurrentPage(page)
                 isFirstLoad = false
                 
-                pageDelegate?.getUserCFI?(completionHandler: { [weak self] (cfiStr) in
-                    guard let cfiStr = cfiStr,
+                pageDelegate?.getUserCFI?(completionHandler: { [weak self] (cfiString) in
+                    guard let cfiStr = cfiString,
                         let cfi = EpubCFI.parse(cfi: cfiStr) else {
                         self?.scroll(page, using: self?.folioReader.savedPositionForCurrentBook)
                         return

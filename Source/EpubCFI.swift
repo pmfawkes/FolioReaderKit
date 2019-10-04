@@ -96,12 +96,11 @@ class EpubCFI {
                 return nil
         }
         
-        let parts = String(cfi[startIndex..<endIndex]).split(separator: "/")
+        let parts = String(cfi[cfi.index(after: startIndex)..<endIndex]).split(separator: "/")
         let nodes = parts.map { (s) -> CFI.Node in
-            guard let nodeString = s as? String else { return CFI.Node() }
-            return parseCFINode(cfiNodeStr: nodeString)
+            return parseCFINode(cfiNodeStr: String(s))
         }
-        var result = CFI(nodes: nodes)
+        let result = CFI(nodes: nodes)
         return result
     }
     
@@ -116,8 +115,8 @@ class EpubCFI {
         if let start = cfiNodeStr.index(of: "[") {
             
         }
-        guard let index = Int(indexStr) else { return CFI.Node() }
-        return CFI.Node(index: index.toDOMIndex, reference: refStr)
+        guard let index = Int(cfiNodeStr) else { return CFI.Node() }
+        return CFI.Node(index: index, reference: refStr)
     }
     
     

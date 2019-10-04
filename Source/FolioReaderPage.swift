@@ -41,6 +41,12 @@ import JavaScriptCore
      
      */
     @objc optional func getUserCFI(completionHandler: @escaping (String?) -> Void )
+    
+    /**
+     Notify the delegate assignee that user CFI has changed
+     
+     */
+    @objc optional func userCFIChanged(cfi: String)
 }
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {

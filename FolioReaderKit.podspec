@@ -30,10 +30,9 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"
-  s.dependency 'Zip', '1.1'
   s.dependency 'MenuItemKit', '3.1.3'
   s.dependency 'AEXML', '4.3.3'
   s.dependency 'FontBlaster', '4.1.0'
-  s.dependency 'SWCompression', '4.5.0'
+  s.dependency 'SWCompression', '4.5.1'
 
 end

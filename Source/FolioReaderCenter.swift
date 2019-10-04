@@ -1024,7 +1024,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
         }
-        search(book.flatTableOfContents)
+        search(book.flatTableOfContents ?? [])
 
         return foundResource
     }
@@ -1439,18 +1439,29 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
 extension FolioReaderCenter: FolioReaderPageDelegate {
 
+    private func scroll(_ page: FolioReaderPage, using cfi: CFI?) {
+        guard let nodeJson = try? JSONEncoder().encode(cfi?.domIndices),
+            let nodeStr = String(data: nodeJson, encoding: .utf8),
+            let pageOffset = page.getReadingPositionOffset(usingId: false, value: nodeStr) else {
+                return
+        }
+        page.scrollPageToOffset(pageOffset, animated: false)
+    }
+    
     public func pageDidLoad(_ page: FolioReaderPage) {
-        if self.readerConfig.loadSavedPositionForCurrentBook, let cfi = folioReader.savedPositionForCurrentBook {
+        if self.readerConfig.loadSavedPositionForCurrentBook {
             if isFirstLoad {
                 updateCurrentPage(page)
                 isFirstLoad = false
                 
-                guard let nodeJson = try? JSONEncoder().encode(cfi.domIndices),
-                    let nodeStr = String(data: nodeJson, encoding: .utf8),
-                    let pageOffset = page.getReadingPositionOffset(usingId: false, value: nodeStr) else {
-                    return
-                }
-                page.scrollPageToOffset(pageOffset, animated: false)
+                pageDelegate?.getUserCFI?(completionHandler: { [weak self] (cfiStr) in
+                    guard let cfiStr = cfiStr,
+                        let cfi = EpubCFI.parse(cfi: cfiStr) else {
+                        self?.scroll(page, using: self?.folioReader.savedPositionForCurrentBook)
+                        return
+                    }
+                    self?.scroll(page, using: cfi)
+                })
             } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
                 page.scrollPageToBottom()
             }

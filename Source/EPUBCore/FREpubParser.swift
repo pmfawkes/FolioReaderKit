@@ -8,7 +8,6 @@
 
 import UIKit
 import AEXML
-import Zip
 import SWCompression
 
 class FREpubParser: NSObject {
@@ -18,6 +17,7 @@ class FREpubParser: NSObject {
     private var resourcesBasePath = ""
     private var shouldRemoveEpub = true
     private var epubPathToRemove: String?
+    private var decrpytionKey: String = ""
 
     /// Parse the Cover Image from an epub file.
     ///
@@ -76,12 +76,13 @@ class FREpubParser: NSObject {
     ///   - unzipPath: Path to unzip the compressed epub.
     /// - Returns: `FRBook` Object
     /// - Throws: `FolioReaderError`
-    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = false, unzipPath: String? = nil) throws -> FRBook {
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = false, unzipPath: String? = nil, key: String = "") throws -> FRBook {
         guard bookZipEntries.isEmpty else {
             return self.book
         }
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
+        decrpytionKey = key
 
         let fileManager = FileManager.default
         let bookName = withEpubPath.lastPathComponent
@@ -93,9 +94,8 @@ class FREpubParser: NSObject {
         
         do {
             let bookPath = URL(fileURLWithPath: withEpubPath)
-            let key = "abcdefghijklmnop"
             let encryptedEpubData = try Data(contentsOf: bookPath)
-            guard let keyData = key.data(using: .utf8) else { throw FolioReaderError.decrpytionFailed }
+            guard let keyData = decrpytionKey.data(using: .utf8) else { throw FolioReaderError.decrpytionFailed }
             let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyData.sha256(data: keyData) as NSData)
             guard let decryptedEpubData = try decryptor.decrypt() else { throw FolioReaderError.decrpytionFailed }
             
@@ -161,7 +161,10 @@ class FREpubParser: NSObject {
         
         // Parse and save each "manifest item"
         xmlDoc.root["manifest"]["item"].all?.forEach { item in
-            guard let entry = self.bookZipEntries.first(where: { $0.info.name.lastPathComponent == item.attributes["href"] }) else { return }
+            guard let href = item.attributes["href"], let entry = self.bookZipEntries.first(where: { $0.info.name.contains(href) }) else {
+                return
+                
+            }
             let resource = FRResource()
             resource.id = item.attributes["id"]
             resource.properties = item.attributes["properties"]

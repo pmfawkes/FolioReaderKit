@@ -87,59 +87,14 @@ class FolioReaderPageIndicator: UIView {
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        let epub = folioReader.readerCenter?.book
-        //grab all html items and save in array/object
-        guard let allChapterResources = epub?.spine.spineReferences else {
-            return
-        }
-        //sum the size of all chapters
-        let totalLength = allChapterResources.reduce(0) { (result: Int, currentSpine: Spine) -> Int in
-            let html = String(data: currentSpine.resource.data, encoding: .utf8)
-            return result + (html?.count ?? 0)
-        }
-        //grab current chapter index
-        guard let currentChapterGivenPage = folioReader.readerCenter?.currentPage, let currentChapterIndex = currentChapterGivenPage.pageNumber else {
-            return
-        }
-        //sum the size of all chapters leading up to the current chapter if you're on chapter one the sum should be 0
-        var sum = 0.0
-        //for loop to begin summing current progress
-        for i in 0..<(currentChapterIndex - 1) {
-            guard let currentResouce = epub?.spine.spineReferences[i].resource.data else {
-                return
-            }
-            guard var html = String(data: currentResouce, encoding: .utf8) else {
-                return
-            }
-            sum += Double(html.count)
-        }
-        //percentage of current chapter which shows each chapter contributes to the book
-        let totalProgressGivenCurrentChapter = (sum / Double(totalLength))
-        
-        
-        guard let htmlData = epub?.spine.spineReferences[currentChapterIndex - 1].resource.data else {
-            return
-        }
-        
-        guard  let currentChapterSize = String(data: htmlData , encoding: .utf8)?.count else {
-            return
-        }
-        
-        let chatperPercentage = Double(currentChapterSize) / Double(totalLength)
-        
-        let pagePercentage = (chatperPercentage / Double(totalPages))
-        
-        let currentProgress = totalProgressGivenCurrentChapter + (Double(page) * pagePercentage)
-
         let percentFormatter = NumberFormatter()
         percentFormatter.numberStyle = NumberFormatter.Style.percent
         percentFormatter.multiplier = 1
         percentFormatter.minimumFractionDigits = 1
         percentFormatter.maximumFractionDigits = 2
         
-        guard let percentAsString = percentFormatter.string(for: currentProgress * 100.0)else {
-            return
-        }
+        guard let currentProgress = folioReader.readerCenter?.getGlobalReadingProgress,
+            let percentAsString = percentFormatter.string(for: currentProgress * 100.0) else { return }
         pagesLabel.text = "\(percentAsString) of " + self.readerConfig.localizedPercentageOfBookCompleted
         reloadView(updateShadow: false)
     }

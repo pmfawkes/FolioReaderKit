@@ -365,7 +365,7 @@ extension FolioReader {
             
         // TODO: use local DB and call API to store the CFI data
         savedPositionForCurrentBook = cfi
-        print(cfi.standardizedFormat)
+        readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
     }
 
     /// Closes and save the reader current instance.

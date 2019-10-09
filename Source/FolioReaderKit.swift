@@ -357,7 +357,7 @@ extension FolioReader {
         }
 
         guard let currentPage = self.readerCenter?.currentPage,
-            let currentPosition = currentPage.webView?.js("getCurrentPosition()"),
+            let currentPosition = currentPage.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
             let currentPageNumber = readerCenter?.currentPageNumber,
             let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) else {
             return

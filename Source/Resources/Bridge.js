@@ -654,8 +654,8 @@ var onClassBasedListenerClick = function(schemeName, attributeContent) {
 }
 
 
-function getReadingPositionOffset(usingId, isHorizontal, tagIndices) {
-    var elm = document.children[0];
+function getReadingPositionOffset(isHorizontal, tagIndices) {
+    var elm = document.body;
     for (i = 0; i < tagIndices.length; i++) {
         elm = elm.children[tagIndices[i]];
     }
@@ -672,39 +672,37 @@ var getElementOffset = function(target, horizontal) {
 
 
 //Get Read Position Implementation
-function isAfter(el, isHorizontal) {
+function isVisible(el, isHorizontal) {
     var rect = el.getBoundingClientRect();
-    var isAfter;
-    if(isHorizontal) {
-        isAfter = rect.left > 0;
+    var isVisible;
+    if (isHorizontal) {
+        isVisible = rect.left >= 0 || rect.right >= 0;
     } else {
-        isAfter = rect.top > 0;
+        isVisible = rect.top >= 0 || rect.bottom >= 0;
     }
-    return isAfter;
+    return isVisible;
 }
 
-function getCurrentPosition() {
-    // TODO: we should be able to track not only the p tag.
-    var lines = document.body.getElementsByTagName("p");
-    var visibleSpanId = 0;
-    var visibleLine;
-    
-    for (var i = 0, max = lines.length; i < max; i++) {
-        if (isAfter(lines[i], true)){
-            visibleSpanId = i;
-            visibleLine = lines[i]
+function getVisibleChild(parent, isHorizontal) {
+    var children = parent.children, visibleChild;
+    for (var i = 0; i < children.length; i++) {
+        if (isVisible(children[i], isHorizontal)) {
+            visibleChild = children[i];
             break;
         }
     }
-    
-    var usingId = false;
-    var child = visibleLine, parent = child.parentElement;
+    return visibleChild;
+}
+
+function getCurrentPosition(isHorizontal) {
+    var parent = document.body;
     var parentTags = [];
-    while (parent !== null) {
-        var index = Array.prototype.indexOf.call(parent.children, child);
-        parentTags.push({"tag": child.nodeName, "index": index});
-        child = parent;
-        parent = child.parentElement;
+    
+    while (parent !== null && parent.children !== null && parent.children.length != 0) {
+        var childNode = getVisibleChild(parent, isHorizontal);
+        var index = Array.prototype.indexOf.call(parent.children, childNode);
+        parentTags.push({"tag": childNode.nodeName, "id": childNode.id, "index": index});
+        parent = childNode;
     }
     return JSON.stringify(parentTags.reverse());
 }

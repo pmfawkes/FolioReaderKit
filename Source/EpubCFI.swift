@@ -53,6 +53,7 @@ public struct CFI: Codable {
 // The internal node structure especially designed for DOM elements
 struct DOMNode: Codable {
     var index: Int
+    var id: String
     var tag: String
 }
 
@@ -110,13 +111,9 @@ class EpubCFI {
     /// - Parameter cfiNodeStr: CFI string snippet
     /// - Returns: the parsed CFI node; empty CFI.Node if not exists
     static func parseCFINode(cfiNodeStr: String) -> CFI.Node {
-        var indexStr = "", refStr = ""
-        // Add code to better handle more complex CFI references
-        if let start = cfiNodeStr.index(of: "[") {
-            
-        }
-        guard let index = Int(cfiNodeStr) else { return CFI.Node() }
-        return CFI.Node(index: index, reference: refStr)
+        guard let range = cfiNodeStr.range(of: "^[0-9]*", options: .regularExpression),
+            let index = Int(cfiNodeStr[range]) else { return CFI.Node() }
+        return CFI.Node(index: index, reference: "")
     }
     
     
@@ -130,8 +127,8 @@ class EpubCFI {
         guard let data = odmStr.data(using: .utf8) else { return nil }
         do {
             let domNodes = try JSONDecoder().decode([DOMNode].self, from: data)
-            let nodes = [DOMNode(index: EpubCFI.spineIndex, tag: ""),
-                         DOMNode(index: chapterIndex, tag: "")] + domNodes
+            let nodes = [DOMNode(index: EpubCFI.spineIndex, id: "", tag: ""),
+                         DOMNode(index: chapterIndex, id: "", tag: "")] + domNodes
             return CFI(nodes: nodes)
         } catch {
             print(error.localizedDescription)

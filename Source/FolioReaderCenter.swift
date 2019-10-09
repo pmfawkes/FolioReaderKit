@@ -1272,10 +1272,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 if (pageIndicatorView?.currentPage != webViewPage) {
                     pageIndicatorView?.currentPage = webViewPage
                     
-                    if let currentPosition = currentPage?.webView?.js("getCurrentPosition()"),
+                    if let currentPosition = currentPage?.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
                         let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) {
-                        
-                        // TODO: use local DB and call API to store the CFI data
                         folioReader.savedPositionForCurrentBook = cfi
                         pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
                     }
@@ -1442,7 +1440,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
     private func scroll(_ page: FolioReaderPage, using cfi: CFI?) {
         guard let nodeJson = try? JSONEncoder().encode(cfi?.domIndices),
             let nodeStr = String(data: nodeJson, encoding: .utf8),
-            let pageOffset = page.getReadingPositionOffset(usingId: false, value: nodeStr) else {
+            let pageOffset = page.getReadingPositionOffset(value: nodeStr) else {
                 return
         }
         page.scrollPageToOffset(pageOffset, animated: false)

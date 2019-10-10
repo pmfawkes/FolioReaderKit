@@ -56,10 +56,15 @@ open class FolioReaderWebView: UIWebView {
         } else if isColors {
             return false
         } else {
+            if action == #selector(copy(_:))
+            {
+                return false
+            }
+            
             if (action == #selector(define(_:)) && isOneWord)
                 || (action == #selector(play(_:)) && (book.hasAudio || readerConfig.enableTTS))
                 || (action == #selector(share(_:)) && readerConfig.allowSharing)
-                || (action == #selector(copy(_:)) && readerConfig.allowSharing) {
+                 {
                 return true
             }
             return false

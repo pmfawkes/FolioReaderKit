@@ -362,8 +362,7 @@ extension FolioReader {
             let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) else {
             return
         }
-            
-        // TODO: use local DB and call API to store the CFI data
+        
         savedPositionForCurrentBook = cfi
         readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
     }

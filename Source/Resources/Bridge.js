@@ -704,5 +704,5 @@ function getCurrentPosition(isHorizontal) {
         parentTags.push({"tag": childNode.nodeName, "id": childNode.id, "index": index});
         parent = childNode;
     }
-    return JSON.stringify(parentTags.reverse());
+    return JSON.stringify(parentTags);
 }

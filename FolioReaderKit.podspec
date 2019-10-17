@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
     'Source/**/*.swift',
     'Vendor/**/*.swift',
   ]
-  s.resources = [
-    'Source/**/*.{js,css}',
-    'Source/Resources/*.xcassets',
-    'Source/Resources/Fonts/**/*.{otf,ttf}'
-  ]
+  s.resource_bundles = {
+    'FolioReader' => ['Source/**/*.{js,css}',
+      'Source/Resources/*.xcassets',
+      'Source/Resources/Fonts/**/*.{otf,ttf}']
+  }
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"

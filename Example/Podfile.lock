@@ -1,7 +1,7 @@
 PODS:
   - AEXML (4.3.3)
   - BitByteData (1.4.1)
-  - FolioReaderKit (1.4.0):
+  - FolioReaderKit (1.4.3):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
     - MenuItemKit (= 3.1.3)
@@ -71,13 +71,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
   BitByteData: 40d356e9ce103ae62f34b74ed76c746eb5cc783f
-  FolioReaderKit: ef0e69b7b5c7b7fc78b473ff58dfbd4866b0a1b7
+  FolioReaderKit: ddb9898ef6cd4a3947233d4b921bcf92a8539ea9
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   SWCompression: 02a231af1b1df08be91802df4986d328f2a7c906
 
-PODFILE CHECKSUM: 349012a91d0d6ca10c38e7a97229c658a2e46f85
+PODFILE CHECKSUM: e490dec19dbcf341b03af3cca3e55d07fc829cdf
 
 COCOAPODS: 1.7.5

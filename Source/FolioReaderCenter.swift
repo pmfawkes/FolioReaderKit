@@ -1365,10 +1365,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         folioReader.saveReaderState()
 
         let chapter = FolioReaderChapterList(folioReader: folioReader, readerConfig: readerConfig, book: book, delegate: self)
+        let highlight = FolioReaderHighlightList(folioReader: folioReader, readerConfig: readerConfig)
         let pageController = PageViewController(folioReader: folioReader, readerConfig: readerConfig)
 
         pageController.viewControllerOne = chapter
-        pageController.viewControllerTwo = UIViewController()
+        pageController.viewControllerTwo = highlight
         pageController.segmentedControlItems = [readerConfig.localizedContentsTitle, readerConfig.localizedHighlightsTitle]
 
         let nav = UINavigationController(rootViewController: pageController)
@@ -1429,6 +1430,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if UIDevice.current.userInterfaceIdiom == .pad {
             nav.modalPresentationStyle = .formSheet
         }
+        present(nav, animated: true, completion: nil)
+    }
+    
+    /**
+     Present add highlight note
+     */
+    func presentAddHighlightNote(_ highlight: Highlight, edit: Bool) {
+        let addHighlightView = FolioReaderAddHighlightNote(withHighlight: highlight, folioReader: folioReader, readerConfig: readerConfig)
+        addHighlightView.isEditHighlight = edit
+        let nav = UINavigationController(rootViewController: addHighlightView)
+        nav.modalPresentationStyle = .formSheet
+        
         present(nav, animated: true, completion: nil)
     }
 }

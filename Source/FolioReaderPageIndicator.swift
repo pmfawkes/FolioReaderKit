@@ -28,13 +28,6 @@ class FolioReaderPageIndicator: UIView {
 
         let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         backgroundColor = color
-        layer.shadowColor = color.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: -6)
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 4
-        layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-        layer.rasterizationScale = UIScreen.main.scale
-        layer.shouldRasterize = true
 
         pagesLabel = UILabel(frame: CGRect.zero)
         pagesLabel.font = UIFont(name: "Avenir-Light", size: 10)!

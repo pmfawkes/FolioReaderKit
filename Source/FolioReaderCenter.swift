@@ -135,7 +135,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         setPageSize(UIApplication.shared.statusBarOrientation)
 
         // Layout
-        collectionViewLayout.sectionInset = UIEdgeInsets.zero
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: 30, left: 0, bottom: 40, right: 0)
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .direction(withConfiguration: self.readerConfig)

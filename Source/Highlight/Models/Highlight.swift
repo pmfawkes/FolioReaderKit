@@ -8,7 +8,7 @@
 import Foundation
 
 final class Highlight {
-    var id: Int = 0
+    var id: String = ""
     var bookId: String = ""
     var content: String = ""
     var contentPost: String = ""
@@ -20,7 +20,7 @@ final class Highlight {
     var endOffset: Int = -1
     var noteForHighlight: String?
     
-    init(id: Int = 0, bookId: String = "", content: String = "", contentPost: String = "", contentPre: String = "", date: Date = Date(), page: Int = 0, type: Int = 0, startOffset: Int = -1, endOffset: Int = -1, noteForHighlight: String? = nil) {
+    init(id: String = "", bookId: String = "", content: String = "", contentPost: String = "", contentPre: String = "", date: Date = Date(), page: Int = 0, type: Int = 0, startOffset: Int = -1, endOffset: Int = -1, noteForHighlight: String? = nil) {
         self.id = id
         self.bookId = bookId
         self.content = content
@@ -39,24 +39,18 @@ extension Highlight: SQLTable {
     static var createStatement: String {
         return """
         CREATE TABLE "highlights" (
-        "id" INTEGER PRIMARY KEY NOT NULL,
-        "bookId" TEXT
-        "content" TEXT
-        "contentPost" TEXT
-        "contentPre" TEXT
-        "date" REAL
-        "page" INTEGER
-        "type" INTEGER
-        "startOffset" INTEGER
-        "endOffset" INTEGER
+        "id" TEXT PRIMARY KEY NOT NULL,
+        "bookId" TEXT,
+        "content" TEXT,
+        "contentPost" TEXT,
+        "contentPre" TEXT,
+        "date" REAL,
+        "page" INTEGER,
+        "type" INTEGER,
+        "startOffset" INTEGER,
+        "endOffset" INTEGER,
         "noteForHighlight" TEXT
         );
         """
     }
 }
-
-//extension Results {
-//    func toArray<T>(_ ofType: T.Type) -> [T] {
-//        return compactMap { $0 as? T }
-//    }
-//}

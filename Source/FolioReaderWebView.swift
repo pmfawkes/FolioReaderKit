@@ -56,15 +56,16 @@ open class FolioReaderWebView: UIWebView {
         } else if isColors {
             return false
         } else {
-            if action == #selector(copy(_:))
-            {
+            if action == #selector(copy(_:)) {
                 return false
             }
             
-            if (action == #selector(define(_:)) && isOneWord)
-                || (action == #selector(play(_:)) && (book.hasAudio || readerConfig.enableTTS))
-                || (action == #selector(share(_:)) && readerConfig.allowSharing)
-                 {
+            if action == #selector(highlight(_:)) ||
+                action == #selector(highlightWithNote(_:)) ||
+                action == #selector(updateHighlightNote(_:)) ||
+                (action == #selector(define(_:)) && isOneWord) ||
+                (action == #selector(play(_:)) && (book.hasAudio || readerConfig.enableTTS)) ||
+                (action == #selector(share(_:)) && readerConfig.allowSharing) {
                 return true
             }
             return false
@@ -125,43 +126,40 @@ open class FolioReaderWebView: UIWebView {
     }
 
     func remove(_ sender: UIMenuController?) {
-        if let removedId = Int(js("removeThisHighlight()") ?? "") {
+        if let removedId = js("removeThisHighlight()") {
             Highlight.removeById(withConfiguration: self.readerConfig, highlightId: removedId)
         }
         setMenuVisible(false)
     }
-
+    
     @objc func highlight(_ sender: UIMenuController?) {
         let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
-        
+
         do {
             let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
             let rect = NSCoder.cgRect(for: dic["rect"]!)
-            guard let startOffset = dic["startOffset"] else {
+            guard let startOffset = dic["startOffset"],
+                let endOffset = dic["endOffset"] else {
                 return
             }
-            guard let endOffset = dic["endOffset"] else {
-                return
-            }
-            
+
             createMenu(options: true)
             setMenuVisible(true, andRect: rect)
-            
+
             // Persist
-            guard
-                let html = js("getHTML()"),
-                let identifier = Int(dic["id"] ?? "0"),
+            guard let html = js("getHTML()"),
+                let identifier = dic["id"],
                 let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
                     return
             }
-            
+
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
             let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
-            let highlight = Highlight.matchHighlight(match)
-            highlight?.persist(withConfiguration: self.readerConfig)
-            
+            guard let highlight = Highlight.matchHighlight(match) else { return }
+            DBAPIManager.shared.addHighlight(highlight: highlight)
+
         } catch {
             print("Could not receive JSON")
         }
@@ -181,7 +179,7 @@ open class FolioReaderWebView: UIWebView {
             self.clearTextSelection()
             
             guard let html = js("getHTML()") else { return }
-            guard let identifier = Int(dic["id"] ?? "0") else { return }
+            guard let identifier = dic["id"] else { return }
             guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else { return }
             
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
@@ -194,8 +192,8 @@ open class FolioReaderWebView: UIWebView {
         }
     }
     
-    @objc func updateHighlightNote (_ sender: UIMenuController?) {
-        guard let highlightId = Int(js("getHighlightId()") ?? "") else { return }
+    @objc func updateHighlightNote(_ sender: UIMenuController?) {
+        guard let highlightId = js("getHighlightId()") else { return }
         guard let highlightNote = Highlight.getById(withConfiguration: readerConfig, highlightId: highlightId) else { return }
         self.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
     }
@@ -254,7 +252,7 @@ open class FolioReaderWebView: UIWebView {
     // MARK: - Create and show menu
 
     func createMenu(options: Bool) {
-        guard (self.readerConfig.useReaderMenuController == true) else {
+        guard readerConfig.useReaderMenuController else {
             return
         }
 
@@ -316,7 +314,7 @@ open class FolioReaderWebView: UIWebView {
             menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
         } else {
             // default menu
-            menuItems = [highlightItem, defineItem, highlightNoteItem]
+            menuItems = [highlightItem, highlightNoteItem, defineItem]
             
             if self.book.hasAudio || self.readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)

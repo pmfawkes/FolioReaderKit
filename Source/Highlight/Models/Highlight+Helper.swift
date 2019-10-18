@@ -108,7 +108,7 @@ extension Highlight {
     /// - Parameters:
     ///   - readerConfig: Current folio reader configuration.
     ///   - highlightId: The ID to be removed
-    public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: Int) {
+    public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
         DBAPIManager.shared.removeHighlight(byId: highlightId)
     }
     
@@ -119,7 +119,7 @@ extension Highlight {
     ///   - highlightId: The ID to be removed
     ///   - page: Page number
     /// - Returns: Return a Highlight
-    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: Int) -> Highlight? {
+    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) -> Highlight? {
         return DBAPIManager.shared.getHighlight(byId: highlightId)
     }
     
@@ -130,21 +130,7 @@ extension Highlight {
     ///   - highlightId: The ID to be removed
     ///   - type: The `HighlightStyle`
     public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
-//        var highlight: Highlight?
-//        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
-//        do {
-//            let realm = try Realm(configuration: readerConfig.realmConfiguration)
-//            highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
-//            realm.beginWrite()
-//
-//            highlight?.type = type.hashValue
-//
-//            try realm.commitWrite()
-//
-//        } catch let error as NSError {
-//            print("Error on updateById: \(error)")
-//        }
-        
+        DBAPIManager.shared.updateHighlight(id: highlightId, type: type)
     }
     
     /// Return a list of Highlights with a given ID
@@ -172,7 +158,7 @@ extension Highlight {
     
     public struct MatchingHighlight {
         var text: String
-        var id: Int
+        var id: String
         var startOffset: String
         var endOffset: String
         var bookId: String

@@ -165,11 +165,8 @@ class FolioReaderAddHighlightNote: UIViewController {
     @objc private func saveNote(_ sender: UIBarButtonItem) {
         if !textView.text.isEmpty {
             if isEditHighlight {
-//                let realm = try! Realm(configuration: readerConfig.realmConfiguration)
-//                realm.beginWrite()
-//                highlight.noteForHighlight = textView.text
-//                highlightSaved = true
-//                try! realm.commitWrite()
+                DBAPIManager.shared.updateHighlight(id: highlight.id, note: textView.text)
+                highlightSaved = true
             } else {
                 highlight.noteForHighlight = textView.text
                 highlight.persist(withConfiguration: readerConfig)

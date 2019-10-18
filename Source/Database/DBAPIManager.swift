@@ -13,7 +13,16 @@ class DBAPIManager: NSObject {
     
     private var dbHandler: SQLiteDatabase?
     private let databasePath: String = {
-       return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path
+        guard let dbURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return "" }
+        var isDir : ObjCBool = false
+        let dbPath = dbURL.appendingPathComponent("db.sqlite").relativePath
+        guard !FileManager.default.fileExists(atPath: dbURL.path, isDirectory: &isDir) else { return dbPath }
+        do {
+            try FileManager.default.createDirectory(at: dbURL, withIntermediateDirectories: false, attributes: nil)
+        } catch (let error) {
+            print(error)
+        }
+        return dbPath
     }()
     
     override init() {
@@ -48,11 +57,19 @@ class DBAPIManager: NSObject {
         }
     }
     
-    func removeHighlight(byId id: Int) {
+    func updateHighlight(id: String, type: HighlightStyle) {
+        dbHandler?.updateHighlight(id: id, type: type.rawValue)
+    }
+    
+    func updateHighlight(id: String, note: String) {
+        dbHandler?.updateHighLight(id: id, note: note)
+    }
+    
+    func removeHighlight(byId id: String) {
         dbHandler?.removeHighlight(id: id)
     }
     
-    func getHighlight(byId id: Int) -> Highlight? {
+    func getHighlight(byId id: String) -> Highlight? {
         return dbHandler?.getHighlight(id: id)
     }
     

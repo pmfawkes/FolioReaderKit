@@ -9,7 +9,6 @@
 import UIKit
 import SafariServices
 import MenuItemKit
-import JavaScriptCore
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -156,7 +155,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     func loadHTMLString(_ htmlContent: String!, baseURL: URL!) {
         // Load the html into the webview
         webView?.alpha = 0
-        webView?.loadHTMLString(htmlContent, baseURL: baseURL)
+        webView?.loadHTMLString(htmlContentWithInsertHighlights(htmlContent), baseURL: baseURL)
     }
     
     // MARK: - Highlights

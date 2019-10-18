@@ -394,7 +394,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func toggleBars() {
-        guard self.readerConfig.shouldHideNavigationOnTap == true else {
+        guard readerConfig.shouldHideNavigationOnTap else {
             return
         }
 

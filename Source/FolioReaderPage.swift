@@ -57,8 +57,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     open var webView: FolioReaderWebView?
 
     fileprivate var colorView: UIView!
-    fileprivate var shouldShowBar = true
-    fileprivate var menuIsVisible = false
 
     fileprivate var readerConfig: FolioReaderConfig {
         guard let readerContainer = readerContainer else { return FolioReaderConfig() }
@@ -244,7 +242,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         guard let url = request.url else { return false }
 
         if scheme == "highlight" || scheme == "highlight-with-note" {
-            shouldShowBar = false
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let index = decoded.index(decoded.startIndex, offsetBy: 12)
@@ -252,7 +249,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)
-            menuIsVisible = true
 
             return false
         } else if scheme == "play-audio" {
@@ -381,24 +377,15 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     @objc open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         self.delegate?.pageTap?(recognizer)
         
-        if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
+        if let _navigationController = folioReader.readerCenter?.navigationController, _navigationController.isNavigationBarHidden {
             let selected = webView?.js("getSelectedText()")
-            
-            guard (selected == nil || selected?.isEmpty == true) else {
-                return
+            guard selected?.isEmpty ?? true else { return }
+            let delay = 0.4
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                self.folioReader.readerCenter?.toggleBars()
             }
-
-            let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
-            let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
-            
-            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                if (self.shouldShowBar == true && self.menuIsVisible == false) {
-                    self.folioReader.readerCenter?.toggleBars()
-                }
-            })
-        } else if (self.readerConfig.shouldHideNavigationOnTap == true) {
-            self.folioReader.readerCenter?.hideBars()
-            self.menuIsVisible = false
+        } else if readerConfig.shouldHideNavigationOnTap {
+            folioReader.readerCenter?.hideBars()
         }
     }
 

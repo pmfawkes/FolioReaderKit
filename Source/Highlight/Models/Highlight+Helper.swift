@@ -13,13 +13,13 @@ import UIKit
  HighlightStyle type, default is .Yellow.
  */
 public enum HighlightStyle: Int {
-    case yellow
+    case yellow = 0
     case green
     case blue
     case pink
     case underline
     
-    public init () {
+    public init() {
         // Default style is `.yellow`
         self = .yellow
     }
@@ -29,12 +29,12 @@ public enum HighlightStyle: Int {
      */
     public static func styleForClass(_ className: String) -> HighlightStyle {
         switch className {
-        case "highlight-yellow": return .yellow
-        case "highlight-green": return .green
-        case "highlight-blue": return .blue
-        case "highlight-pink": return .pink
+        case "highlight-yellow":    return .yellow
+        case "highlight-green":     return .green
+        case "highlight-blue":      return .blue
+        case "highlight-pink":      return .pink
         case "highlight-underline": return .underline
-        default: return .yellow
+        default:                    return .yellow
         }
     }
     
@@ -45,24 +45,24 @@ public enum HighlightStyle: Int {
         
         let enumStyle = (HighlightStyle(rawValue: style) ?? HighlightStyle())
         switch enumStyle {
-        case .yellow: return "highlight-yellow"
-        case .green: return "highlight-green"
-        case .blue: return "highlight-blue"
-        case .pink: return "highlight-pink"
-        case .underline: return "highlight-underline"
+        case .yellow:       return "highlight-yellow"
+        case .green:        return "highlight-green"
+        case .blue:         return "highlight-blue"
+        case .pink:         return "highlight-pink"
+        case .underline:    return "highlight-underline"
         }
     }
     
     /// Color components for the style
     ///
     /// - Returns: Tuple of all color compnonents.
-    private func colorComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+    private var colorComponents: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         switch self {
-        case .yellow: return (red: 255, green: 235, blue: 107, alpha: 0.9)
-        case .green: return (red: 192, green: 237, blue: 114, alpha: 0.9)
-        case .blue: return (red: 173, green: 216, blue: 255, alpha: 0.9)
-        case .pink: return (red: 255, green: 176, blue: 202, alpha: 0.9)
-        case .underline: return (red: 240, green: 40, blue: 20, alpha: 0.6)
+        case .yellow:       return (red: 255, green: 235, blue: 107, alpha: 0.9)
+        case .green:        return (red: 192, green: 237, blue: 114, alpha: 0.9)
+        case .blue:         return (red: 173, green: 216, blue: 255, alpha: 0.9)
+        case .pink:         return (red: 255, green: 176, blue: 202, alpha: 0.9)
+        case .underline:    return (red: 240, green: 40, blue: 20, alpha: 0.6)
         }
     }
     
@@ -71,85 +71,8 @@ public enum HighlightStyle: Int {
      */
     public static func colorForStyle(_ style: Int, nightMode: Bool = false) -> UIColor {
         let enumStyle = (HighlightStyle(rawValue: style) ?? HighlightStyle())
-        let colors = enumStyle.colorComponents()
+        let colors = enumStyle.colorComponents
         return UIColor(red: colors.red/255, green: colors.green/255, blue: colors.blue/255, alpha: (nightMode ? colors.alpha : 1))
-    }
-}
-
-/// :nodoc:
-public typealias Completion = (_ error: NSError?) -> ()
-
-extension Highlight {
-    
-    /// Save a Highlight with completion block
-    ///
-    /// - Parameters:
-    ///   - readerConfig: Current folio reader configuration.
-    ///   - completion: Completion block.
-    public func persist(withConfiguration readerConfig: FolioReaderConfig, completion: Completion? = nil) {
-        do {
-            DBAPIManager.shared.addHighlight(highlight: self)
-            completion?(nil)
-        } catch let error as NSError {
-            print("Error on persist highlight: \(error)")
-            completion?(error)
-        }
-    }
-    
-    /// Remove a Highlight
-    ///
-    /// - Parameter readerConfig: Current folio reader configuration.
-    public func remove(withConfiguration readerConfig: FolioReaderConfig) {
-        DBAPIManager.shared.removeHighlight(byId: self.id)
-    }
-    
-    /// Remove a Highlight by ID
-    ///
-    /// - Parameters:
-    ///   - readerConfig: Current folio reader configuration.
-    ///   - highlightId: The ID to be removed
-    public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
-        DBAPIManager.shared.removeHighlight(byId: highlightId)
-    }
-    
-    /// Return a Highlight by ID
-    ///
-    /// - Parameter:
-    ///   - readerConfig: Current folio reader configuration.
-    ///   - highlightId: The ID to be removed
-    ///   - page: Page number
-    /// - Returns: Return a Highlight
-    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) -> Highlight? {
-        return DBAPIManager.shared.getHighlight(byId: highlightId)
-    }
-    
-    /// Update a Highlight by ID
-    ///
-    /// - Parameters:
-    ///   - readerConfig: Current folio reader configuration.
-    ///   - highlightId: The ID to be removed
-    ///   - type: The `HighlightStyle`
-    public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
-        DBAPIManager.shared.updateHighlight(id: highlightId, type: type)
-    }
-    
-    /// Return a list of Highlights with a given ID
-    ///
-    /// - Parameters:
-    ///   - readerConfig: Current folio reader configuration.
-    ///   - bookId: Book ID
-    ///   - page: Page number
-    /// - Returns: Return a list of Highlights
-    public static func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: Int? = nil) -> [Highlight] {
-        return DBAPIManager.shared.getAllHighlight(byBookId: bookId, page: page)
-    }
-    
-    /// Return all Highlights
-    ///
-    /// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
-    /// - Returns: Return all Highlights
-    public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
-        return DBAPIManager.shared.getAllHighlights()
     }
 }
 

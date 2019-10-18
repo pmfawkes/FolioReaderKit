@@ -169,7 +169,7 @@ class FolioReaderAddHighlightNote: UIViewController {
                 highlightSaved = true
             } else {
                 highlight.noteForHighlight = textView.text
-                highlight.persist(withConfiguration: readerConfig)
+                DBAPIManager.shared.addHighlight(highlight: highlight)
                 highlightSaved = true
             }
         }

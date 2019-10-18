@@ -127,7 +127,7 @@ open class FolioReaderWebView: UIWebView {
 
     func remove(_ sender: UIMenuController?) {
         if let removedId = js("removeThisHighlight()") {
-            Highlight.removeById(withConfiguration: self.readerConfig, highlightId: removedId)
+            DBAPIManager.shared.removeHighlight(byId: removedId)
         }
         setMenuVisible(false)
     }
@@ -194,7 +194,7 @@ open class FolioReaderWebView: UIWebView {
     
     @objc func updateHighlightNote(_ sender: UIMenuController?) {
         guard let highlightId = js("getHighlightId()") else { return }
-        guard let highlightNote = Highlight.getById(withConfiguration: readerConfig, highlightId: highlightId) else { return }
+        guard let highlightNote = DBAPIManager.shared.getHighlight(byId: highlightId) else { return }
         self.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
     }
 
@@ -242,7 +242,7 @@ open class FolioReaderWebView: UIWebView {
         self.folioReader.currentHighlightStyle = style.rawValue
         
         if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
-            Highlight.updateById(withConfiguration: self.readerConfig, highlightId: updateId, type: style)
+            DBAPIManager.shared.updateHighlight(id: updateId, type: style)
         }
         
         //FIX: https://github.com/FolioReader/FolioReaderKit/issues/316

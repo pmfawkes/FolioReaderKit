@@ -48,8 +48,11 @@ class DBAPIManager: NSObject {
         }
     }
     
- 
-    func addHighlight(highlight: Highlight) {
+    /// Save a Highlight with completion block
+    ///
+    /// - Parameters:
+    ///   - completion: Completion block.
+    func addHighlight(highlight: Highlight, completion: ((_ error: Error?) -> ())? = nil) {
         do {
             try dbHandler?.addHighlight(highlight)
         } catch {
@@ -57,26 +60,55 @@ class DBAPIManager: NSObject {
         }
     }
     
+    /// Update a Highlight by ID with type
+    ///
+    /// - Parameters:
+    ///   - highlightId: The ID to be removed
+    ///   - type: The `HighlightStyle`
     func updateHighlight(id: String, type: HighlightStyle) {
         dbHandler?.updateHighlight(id: id, type: type.rawValue)
     }
     
+    /// Update a Highlight by ID with note
+    ///
+    /// - Parameters:
+    ///   - highlightId: The ID to be removed
+    ///   - note: The note text string
     func updateHighlight(id: String, note: String) {
         dbHandler?.updateHighLight(id: id, note: note)
     }
     
+    /// Remove a Highlight by ID
+    ///
+    /// - Parameters:
+    ///   - highlightId: The ID to be removed
     func removeHighlight(byId id: String) {
         dbHandler?.removeHighlight(id: id)
     }
     
+    /// Return a Highlight by ID
+    ///
+    /// - Parameter:
+    ///   - highlightId: The ID to be removed
+    ///   - page: Page number
+    /// - Returns: Return a Highlight
     func getHighlight(byId id: String) -> Highlight? {
         return dbHandler?.getHighlight(id: id)
     }
     
-    func getAllHighlight(byBookId id: String, page: Int?) -> [Highlight] {
+    /// Return a list of Highlights with a given ID
+    ///
+    /// - Parameters:
+    ///   - bookId: Book ID
+    ///   - page: Page number
+    /// - Returns: Return a list of Highlights
+    func getAllHighlight(byBookId id: String, page: Int? = nil) -> [Highlight] {
         return dbHandler?.getAllHighlights(byBookId: id, page: page) ?? []
     }
     
+    /// Return all Highlights
+    ///
+    /// - Returns: Return all Highlights
     func getAllHighlights() -> [Highlight] {
         return dbHandler?.getAllHighlights() ?? []
     }

@@ -27,17 +27,17 @@ class FolioReaderHighlightList: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
-        self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.backgroundColor = folioReader.isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
+        tableView.separatorColor = folioReader.isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
         guard let bookId = (BookProvider.shared.currentBook.name as NSString?)?.deletingPathExtension else {
             self.highlights = []
             return
         }
         
-        self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
+        highlights = DBAPIManager.shared.getAllHighlight(byBookId: bookId)
     }
     
     // MARK: - Table view data source
@@ -190,7 +190,8 @@ class FolioReaderHighlightList: UITableViewController {
                 Highlight.removeFromHTMLById(withinPage: page, highlightId: String(highlight.id)) // Remove from HTML
             }
             
-            highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
+            // Remove from Database
+            DBAPIManager.shared.removeHighlight(byId: highlight.id)
             highlights.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

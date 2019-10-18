@@ -110,9 +110,9 @@ extension SQLiteDatabase {
         print("Successfully inserted row.")
     }
     
-    func updateHighlight(id: String, type: Int) {
+    func updateHighlight(id: String, type: Int) throws {
         let updateSql = "UPDATE highlights SET type = ? WHERE id = ?;"
-        guard let updateStatement = try? prepareStatement(sql: updateSql) else { return }
+        guard let updateStatement = try prepareStatement(sql: updateSql) else { return }
         
         defer {
             sqlite3_finalize(updateStatement)
@@ -124,9 +124,9 @@ extension SQLiteDatabase {
         print("update Highlight Succeeded")
     }
     
-    func updateHighLight(id: String, note: String) {
+    func updateHighLight(id: String, note: String) throws {
         let updateSql = "UPDATE highlights SET noteForHighlight = ? WHERE id = ?;"
-        guard let updateStatement = try? prepareStatement(sql: updateSql) else { return }
+        guard let updateStatement = try prepareStatement(sql: updateSql) else { return }
         
         defer {
             sqlite3_finalize(updateStatement)
@@ -138,9 +138,9 @@ extension SQLiteDatabase {
         print("update Highlight Succeeded")
     }
     
-    func getHighlight(id: String) -> Highlight? {
+    func getHighlight(id: String) throws -> Highlight? {
         let querySql = "SELECT * FROM highlights WHERE id = ? ;"
-        guard let queryStatement = try? prepareStatement(sql: querySql) else {
+        guard let queryStatement = try prepareStatement(sql: querySql) else {
             return nil
         }
         
@@ -166,14 +166,14 @@ extension SQLiteDatabase {
             noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)))
     }
     
-    func getAllHighlights(byBookId bookId: String, page: Int?) -> [Highlight]? {
+    func getAllHighlights(byBookId bookId: String, page: Int?) throws -> [Highlight]? {
         let querySql: String
         if let page = page {
             querySql = "SELECT * FROM highlights WHERE bookId = ? AND page = ?;"
         } else {
             querySql = "SELECT * FROM highlights WHERE bookId = ?;"
         }
-        guard let queryStatement = try? prepareStatement(sql: querySql) else {
+        guard let queryStatement = try prepareStatement(sql: querySql) else {
             return nil
         }
         
@@ -206,9 +206,9 @@ extension SQLiteDatabase {
         return result
     }
     
-    func getAllHighlights() -> [Highlight]? {
+    func getAllHighlights() throws -> [Highlight]? {
         let querySql = "SELECT * FROM highlights;"
-        guard let queryStatement = try? prepareStatement(sql: querySql) else {
+        guard let queryStatement = try prepareStatement(sql: querySql) else {
             return nil
         }
         
@@ -236,9 +236,9 @@ extension SQLiteDatabase {
         return result
     }
     
-    func removeHighlight(id: String) {
+    func removeHighlight(id: String) throws {
         let deleteSql = "DELETE FROM highlights WHERE id = ?"
-        guard let deleteStatement = try? prepareStatement(sql: deleteSql) else { return }
+        guard let deleteStatement = try prepareStatement(sql: deleteSql) else { return }
         
         defer {
             sqlite3_finalize(deleteStatement)

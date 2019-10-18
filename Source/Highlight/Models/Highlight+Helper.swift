@@ -175,7 +175,7 @@ extension Highlight {
                 newLocator += str.substring(with: match.range(at: 1))
             })
             
-            if (matches?.count > 0 && newLocator.isEmpty == false) {
+            if matches?.count > 0 && newLocator.isEmpty == false {
                 locator = newLocator
             }
             

@@ -44,7 +44,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.createTable(table: Highlight.self)
         } catch {
-            print(dbHandler?.errorMessage)
+            print(dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -66,7 +66,11 @@ class DBAPIManager: NSObject {
     ///   - highlightId: The ID to be removed
     ///   - type: The `HighlightStyle`
     func updateHighlight(id: String, type: HighlightStyle) {
-        dbHandler?.updateHighlight(id: id, type: type.rawValue)
+        do {
+            try dbHandler?.updateHighlight(id: id, type: type.rawValue)
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+        }
     }
     
     /// Update a Highlight by ID with note
@@ -75,7 +79,11 @@ class DBAPIManager: NSObject {
     ///   - highlightId: The ID to be removed
     ///   - note: The note text string
     func updateHighlight(id: String, note: String) {
-        dbHandler?.updateHighLight(id: id, note: note)
+        do {
+            try dbHandler?.updateHighLight(id: id, note: note)
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+        }
     }
     
     /// Remove a Highlight by ID
@@ -83,7 +91,11 @@ class DBAPIManager: NSObject {
     /// - Parameters:
     ///   - highlightId: The ID to be removed
     func removeHighlight(byId id: String) {
-        dbHandler?.removeHighlight(id: id)
+        do {
+            try dbHandler?.removeHighlight(id: id)
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+        }
     }
     
     /// Return a Highlight by ID
@@ -93,7 +105,12 @@ class DBAPIManager: NSObject {
     ///   - page: Page number
     /// - Returns: Return a Highlight
     func getHighlight(byId id: String) -> Highlight? {
-        return dbHandler?.getHighlight(id: id)
+        do {
+            return try dbHandler?.getHighlight(id: id)
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+            return nil
+        }
     }
     
     /// Return a list of Highlights with a given ID
@@ -103,13 +120,24 @@ class DBAPIManager: NSObject {
     ///   - page: Page number
     /// - Returns: Return a list of Highlights
     func getAllHighlight(byBookId id: String, page: Int? = nil) -> [Highlight] {
-        return dbHandler?.getAllHighlights(byBookId: id, page: page) ?? []
+        do {
+            return try dbHandler?.getAllHighlights(byBookId: id, page: page) ?? []
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+            return []
+        }
+        
     }
     
     /// Return all Highlights
     ///
     /// - Returns: Return all Highlights
     func getAllHighlights() -> [Highlight] {
-        return dbHandler?.getAllHighlights() ?? []
+        do {
+            return try dbHandler?.getAllHighlights() ?? []
+        } catch {
+            print(dbHandler?.errorMessage ?? "")
+            return []
+        }
     }
 }

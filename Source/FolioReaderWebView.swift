@@ -334,7 +334,7 @@ open class FolioReaderWebView: UIWebView {
             isShare = false
         }
         
-        if menuVisible  {
+        if menuVisible {
             if !rect.equalTo(CGRect.zero) {
                 UIMenuController.shared.setTargetRect(rect, in: self)
             }

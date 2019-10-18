@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HTMLString
 //import ZFDragableModalTransition
 
 /// Protocol which is used from `FolioReaderCenter`s.
@@ -460,6 +461,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             return cell
         }
 
+        html = html.addingASCIIEntities
+        
         let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
 
         // Inject CSS

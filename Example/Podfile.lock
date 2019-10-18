@@ -1,12 +1,14 @@
 PODS:
   - AEXML (4.3.3)
   - BitByteData (1.4.1)
-  - FolioReaderKit (1.4.3):
+  - FolioReaderKit (1.4.4):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
+    - HTMLString (= 4.0.1)
     - MenuItemKit (= 3.1.3)
     - SWCompression (= 4.5.1)
   - FontBlaster (4.1.0)
+  - HTMLString (4.0.1)
   - MenuItemKit (3.1.3)
   - Nimble (7.3.1)
   - Quick (1.3.2)
@@ -59,6 +61,7 @@ SPEC REPOS:
     - AEXML
     - BitByteData
     - FontBlaster
+    - HTMLString
     - MenuItemKit
     - Nimble
     - Quick
@@ -71,8 +74,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
   BitByteData: 40d356e9ce103ae62f34b74ed76c746eb5cc783f
-  FolioReaderKit: ddb9898ef6cd4a3947233d4b921bcf92a8539ea9
+  FolioReaderKit: 0ad9d7daa75bd0ef3b8b0a19aef57662fb121eb5
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
+  HTMLString: 8d9a8a8aaf63dd52c5b8cd9a38e14da52f753210
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46

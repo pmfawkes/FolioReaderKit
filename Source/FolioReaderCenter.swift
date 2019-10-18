@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import HTMLString
 //import ZFDragableModalTransition
 
 /// Protocol which is used from `FolioReaderCenter`s.

@@ -459,8 +459,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         guard var html = String(data: resource.data, encoding: .utf8) else {
             return cell
         }
-
-        html = html.addingASCIIEntities
+        // Although we removed all escaped character entities, &nbsp; are not removed and need to be treated separatedly.
+        html = html.replaceNbspWithSpace
         
         let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
 

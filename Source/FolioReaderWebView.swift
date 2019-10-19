@@ -149,7 +149,7 @@ open class FolioReaderWebView: UIWebView {
             setMenuVisible(true, andRect: rect)
 
             // Persist
-            guard let html = js("getHTML()"),
+            guard let html = js("getHTML()")?.removingHTMLEntities,
                 let identifier = dic["id"],
                 let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
                     return

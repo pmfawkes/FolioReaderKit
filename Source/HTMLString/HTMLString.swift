@@ -52,6 +52,9 @@ public extension String {
         return unicodeScalars.reduce("") { $0 + $1.escapingForASCII }
     }
     
+    public var replaceNbspWithSpace: String {
+        return (self as NSString).replacingOccurrences(of: "&nbsp;", with: " ")
+    }
 }
 
 // MARK: - Unescaping

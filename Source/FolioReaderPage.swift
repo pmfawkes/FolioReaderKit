@@ -158,7 +158,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     
     // MARK: - Highlights
     fileprivate func htmlContentWithInsertHighlights(_ htmlContent: String) -> String {
-        var tempHtmlContent = htmlContent as NSString
+        var tempHtmlContent = htmlContent.removingHTMLEntities as NSString
         // Restore highlights
         guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
             return tempHtmlContent as String

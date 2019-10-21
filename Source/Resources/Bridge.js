@@ -168,7 +168,7 @@ var getRectForSelectedText = function(elm) {
     return "{{" + rect.left + "," + rect.top + "}, {" + rect.width + "," + rect.height + "}}";
 }
 
-// Method that call that a hightlight was clicked
+// Method that call that a highlight was clicked
 // with URL scheme and rect informations
 var callHighlightURL = function(elm) {
 	event.stopPropagation();
@@ -179,7 +179,7 @@ var callHighlightURL = function(elm) {
     window.location = URLBase + encodeURIComponent(currentHighlightRect);
 }
 
-// Method that call that a hightlight with note was clicked
+// Method that call that a highlight with note was clicked
 // with URL scheme and rect informations
 var callHighlightWithNoteURL = function(elm) {
     event.stopPropagation();

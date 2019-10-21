@@ -1,7 +1,7 @@
 PODS:
   - AEXML (4.3.3)
   - BitByteData (1.4.1)
-  - FolioReaderKit (1.4.3):
+  - FolioReaderKit (1.4.4):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
     - MenuItemKit (= 3.1.3)
@@ -71,7 +71,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
   BitByteData: 40d356e9ce103ae62f34b74ed76c746eb5cc783f
-  FolioReaderKit: ddb9898ef6cd4a3947233d4b921bcf92a8539ea9
+  FolioReaderKit: 1a4a4a00f9c47fe3792cb106c5b65454e9f9f147
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae

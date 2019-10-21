@@ -71,7 +71,11 @@ func delay(_ delay:Double, closure:@escaping ()->()) {
 
 internal extension Bundle {
     class func frameworkBundle() -> Bundle {
-        return Bundle(for: FolioReader.self)
+        guard let path = Bundle(for: FolioReader.self).path(forResource: "FolioReader", ofType: "bundle"),
+            let bundle = Bundle(path: path) else {
+                return Bundle(for: FolioReader.self)
+        }
+        return bundle
     }
 }
 

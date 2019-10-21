@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FolioReaderKit"
-  s.version          = "1.4.3"
+  s.version          = "1.4.4"
   s.summary          = "A Swift ePub reader and parser framework for iOS."
   s.description  = <<-DESC
                    Written in Swift.
@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
     'Source/**/*.swift',
     'Vendor/**/*.swift',
   ]
-  s.resources = [
-    'Source/**/*.{js,css}',
-    'Source/Resources/*.xcassets',
-    'Source/Resources/Fonts/**/*.{otf,ttf}'
-  ]
+  s.resource_bundles = {
+    'FolioReader' => ['Source/**/*.{js,css}',
+      'Source/Resources/*.xcassets',
+      'Source/Resources/Fonts/**/*.{otf,ttf}']
+  }
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"

@@ -300,7 +300,7 @@ function goToEl(el) {
     var bottom = window.innerHeight + document.body.scrollTop;
     var elBottom = el.offsetHeight + el.offsetTop + 60
 
-    if(elBottom > bottom || elTop < top) {
+    if (elBottom > bottom || elTop < top) {
         document.body.scrollTop = el.offsetTop - 20
     }
     
@@ -311,7 +311,7 @@ function goToEl(el) {
         height to figure out what page the element should appear on and set scroll left
         to scroll to that page.
     */
-    if( document.body.scrollTop == 0 ){
+    if (document.body.scrollTop == 0) {
         var elLeft = document.body.clientWidth * Math.floor(el.offsetTop / window.innerHeight);
         document.body.scrollLeft = elLeft;
     }
@@ -676,7 +676,7 @@ function isVisible(el, isHorizontal) {
     var rect = el.getBoundingClientRect();
     var isVisible;
     if (isHorizontal) {
-        isVisible = rect.left >= 0 || rect.right >= 0;
+        isVisible = (rect.left >= 0 || rect.right >= 0) && rect.top >= 0;
     } else {
         isVisible = rect.top >= 0 || rect.bottom >= 0;
     }

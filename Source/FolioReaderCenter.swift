@@ -300,11 +300,19 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         configureNavBarButtons()
         setCollectionViewProgressiveDirection()
 
-        guard readerConfig.loadSavedPositionForCurrentBook,
-            let cfi = folioReader.savedPositionForCurrentBook, cfi.nodes.count > 2 else { return }
-        let pageNumber = cfi.nodes[1].index / 2
-        changePageWith(page: pageNumber)
-        currentPageNumber = pageNumber
+        
+        pageDelegate?.getUserCFI?(completionHandler: { [weak self] (cfiString) in
+            guard let stongSelf = self else { return }
+            var cfi = stongSelf.folioReader.savedPositionForCurrentBook
+            if let cfiStr = cfiString, let parsedCFI = EpubCFI.parse(cfi: cfiStr) {
+                cfi = parsedCFI
+                stongSelf.folioReader.savedPositionForCurrentBook = parsedCFI
+            }
+            guard let userCFI = cfi, userCFI.nodes.count > 2 else { return }
+            let pageNumber = userCFI.nodes[1].index / 2
+            stongSelf.changePageWith(page: pageNumber)
+            stongSelf.currentPageNumber = pageNumber
+        })
     }
 
     // MARK: Change page progressive direction
@@ -1271,12 +1279,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
                 if (pageIndicatorView?.currentPage != webViewPage) {
                     pageIndicatorView?.currentPage = webViewPage
-                    
-                    if let currentPosition = currentPage?.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
-                        let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) {
-                        folioReader.savedPositionForCurrentBook = cfi
-                        pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
-                    }
                 }
                 
                 self.delegate?.pageItemChanged?(webViewPage)
@@ -1304,7 +1306,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
+    private func updateUserTrackingLocation() {
+        if let currentPosition = currentPage?.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
+            let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) {
+            folioReader.savedPositionForCurrentBook = cfi
+            pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
+        }
+    }
+    
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        updateUserTrackingLocation()
+        
         self.isScrolling = false
         
         if (scrollView is UICollectionView) {

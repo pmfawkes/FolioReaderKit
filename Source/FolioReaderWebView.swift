@@ -136,28 +136,28 @@ open class FolioReaderWebView: UIWebView {
         let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
 
+        
         do {
             let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
-            let rect = NSCoder.cgRect(for: dic["rect"]!)
-            guard let startOffset = dic["startOffset"],
-                let endOffset = dic["endOffset"] else {
+            guard let startLocation = dic["startLocation"],
+                let endLocation = dic["endLocation"],
+                let dictRect = dic["rect"],
+                let content = dic["content"] else {
                 return
             }
-
+            let rect = NSCoder.cgRect(for: dictRect)
             createMenu(options: true)
             setMenuVisible(true, andRect: rect)
 
             // Persist
-            guard let html = js("getHTML()")?.removingHTMLEntities,
-                let identifier = dic["id"],
+            guard let identifier = dic["id"],
                 let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
                     return
             }
 
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
-            guard let highlight = Highlight.matchHighlight(match) else { return }
+            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
             DBAPIManager.shared.addHighlight(highlight: highlight)
 
         } catch {
@@ -173,20 +173,19 @@ open class FolioReaderWebView: UIWebView {
         do {
             let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
-            guard let startOffset = dic["startOffset"] else { return }
-            guard let endOffset = dic["endOffset"] else { return }
-            
+            guard let startLocation = dic["startLocation"],
+                let endLocation = dic["endLocation"],
+                let content = dic["content"] else {
+                    return
+            }
             self.clearTextSelection()
             
-            guard let html = js("getHTML()") else { return }
             guard let identifier = dic["id"] else { return }
             guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else { return }
             
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
-            if let highlight = Highlight.matchHighlight(match) {
-                self.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
-            }
+            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
+            self.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
         } catch {
             print("Could not receive JSON")
         }

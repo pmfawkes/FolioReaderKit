@@ -184,7 +184,7 @@ open class FolioReaderWebView: UIWebView {
             guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else { return }
             
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, startLocation: startLocation, endLocation: endLocation)
+            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
             self.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
         } catch {
             print("Could not receive JSON")

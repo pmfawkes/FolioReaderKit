@@ -153,45 +153,24 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     func loadHTMLString(_ htmlContent: String!, baseURL: URL!) {
         // Load the html into the webview
         webView?.alpha = 0
-        webView?.loadHTMLString(htmlContentWithInsertHighlights(htmlContent), baseURL: baseURL)
+        webView?.loadHTMLString(htmlContent, baseURL: baseURL)
     }
     
     // MARK: - Highlights
-    fileprivate func htmlContentWithInsertHighlights(_ htmlContent: String) -> String {
-        var tempHtmlContent = htmlContent.removingHTMLEntities as NSString
+    fileprivate func insertHighlights() {
         // Restore highlights
         guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
-            return tempHtmlContent as String
+            return 
         }
         
         let highlights = DBAPIManager.shared.getAllHighlight(byBookId: bookId, page: pageNumber)
         
-        if (highlights.count > 0) {
-            for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type)
-                
-                var tag = ""
-                if let _ = item.noteForHighlight {
-                    tag = "<highlight id=\"\(item.id)\" onclick=\"callHighlightWithNoteURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                } else {
-                    tag = "<highlight id=\"\(item.id)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                }
-                
-                var locator = item.contentPre + item.content
-                locator += item.contentPost
-                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
-                
-                let range: NSRange = tempHtmlContent.range(of: locator, options: .literal)
-                
-                if range.location != NSNotFound {
-                    let newRange = NSRange(location: range.location + item.contentPre.count, length: item.content.count)
-                    tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
-                } else {
-                    print("highlight range not found")
-                }
-            }
+        guard highlights.count > 0 else { return }
+        for highlight in highlights {
+            let style = HighlightStyle.classForStyle(highlight.type)
+            
+            let highlightAndReturn = webView?.js("recreateHighlight('\(highlight.id)','\(style)','\(highlight.startLocation)','\(highlight.endLocation)')")
         }
-        return tempHtmlContent as String
     }
 
     // MARK: - UIWebView Delegate
@@ -202,7 +181,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         }
 
         delegate?.pageWillLoad?(self)
-
+        insertHighlights()
+        
         // Add the custom class based onClick listener
         self.setupClassBasedOnClickListeners()
 

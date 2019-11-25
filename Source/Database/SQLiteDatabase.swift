@@ -83,7 +83,7 @@ extension SQLiteDatabase {
     }
     
     func addHighlight(_ highlight: Highlight) throws {
-        let insertSql = "INSERT INTO highlights (id, bookId, content, contentPost, contentPre, date, page, type, startOffset, endOffset, noteForHighlight) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
+        let insertSql = "INSERT INTO highlights (id, bookId, content, contentPost, contentPre, date, page, type, startOffset, endOffset, noteForHighlight, startLocation, endLocation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
         let insertStatement = try prepareStatement(sql: insertSql)
         defer {
             sqlite3_finalize(insertStatement)
@@ -99,7 +99,9 @@ extension SQLiteDatabase {
             sqlite3_bind_int(insertStatement, 8, Int32(highlight.type)) == SQLITE_OK,
             sqlite3_bind_int(insertStatement, 9, Int32(highlight.startOffset)) == SQLITE_OK,
             sqlite3_bind_int(insertStatement, 10, Int32(highlight.endOffset)) == SQLITE_OK,
-            sqlite3_bind_text(insertStatement, 11, ((highlight.noteForHighlight ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK else {
+            sqlite3_bind_text(insertStatement, 11, ((highlight.noteForHighlight ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK,
+            sqlite3_bind_text(insertStatement, 12, ((highlight.startLocation ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK,
+            sqlite3_bind_text(insertStatement, 13, ((highlight.endLocation ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK else {
                 throw SQLiteError.Bind(message: errorMessage)
         }
         
@@ -163,7 +165,9 @@ extension SQLiteDatabase {
             type: Int(sqlite3_column_int(queryStatement, 7)),
             startOffset: Int(sqlite3_column_int(queryStatement, 8)),
             endOffset: Int(sqlite3_column_int(queryStatement, 9)),
-            noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)))
+            noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)),
+            startLocation: String(cString: sqlite3_column_text(queryStatement, 11)),
+            endLocation: String(cString: sqlite3_column_text(queryStatement, 12)))
     }
     
     func getAllHighlights(byBookId bookId: String, page: Int?) throws -> [Highlight]? {
@@ -199,7 +203,9 @@ extension SQLiteDatabase {
                 type: Int(sqlite3_column_int(queryStatement, 7)),
                 startOffset: Int(sqlite3_column_int(queryStatement, 8)),
                 endOffset: Int(sqlite3_column_int(queryStatement, 9)),
-                noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)))
+                noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)),
+                startLocation: String(cString: sqlite3_column_text(queryStatement, 11)),
+                endLocation: String(cString: sqlite3_column_text(queryStatement, 12)))
             result.append(highlight)
         }
         
@@ -229,7 +235,9 @@ extension SQLiteDatabase {
                 type: Int(sqlite3_column_int(queryStatement, 7)),
                 startOffset: Int(sqlite3_column_int(queryStatement, 8)),
                 endOffset: Int(sqlite3_column_int(queryStatement, 9)),
-                noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)))
+                noteForHighlight: String(cString: sqlite3_column_text(queryStatement, 10)),
+                startLocation: String(cString: sqlite3_column_text(queryStatement, 11)),
+                endLocation: String(cString: sqlite3_column_text(queryStatement, 12)))
             result.append(highlight)
         }
         

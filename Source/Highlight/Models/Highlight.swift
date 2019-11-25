@@ -20,7 +20,11 @@ final class Highlight {
     var endOffset: Int = -1
     var noteForHighlight: String?
     
-    init(id: String = "", bookId: String = "", content: String = "", contentPost: String = "", contentPre: String = "", date: Date = Date(), page: Int = 0, type: Int = 0, startOffset: Int = -1, endOffset: Int = -1, noteForHighlight: String? = nil) {
+    // Schema 1 added
+    var startLocation: String = ""
+    var endLocation: String = ""
+    
+    init(id: String = "", bookId: String = "", content: String = "", contentPost: String = "", contentPre: String = "", date: Date = Date(), page: Int = 0, type: Int = 0, startOffset: Int = -1, endOffset: Int = -1, noteForHighlight: String? = nil, startLocation: String = "", endLocation: String = "") {
         self.id = id
         self.bookId = bookId
         self.content = content
@@ -32,6 +36,8 @@ final class Highlight {
         self.startOffset = startOffset
         self.endOffset = endOffset
         self.noteForHighlight = noteForHighlight
+        self.startLocation = startLocation
+        self.endLocation = endLocation
     }
 }
 
@@ -49,7 +55,9 @@ extension Highlight: SQLTable {
         "type" INTEGER,
         "startOffset" INTEGER,
         "endOffset" INTEGER,
-        "noteForHighlight" TEXT
+        "noteForHighlight" TEXT,
+        "startLocation" TEXT,
+        "endLocation" TEXT
         );
         """
     }

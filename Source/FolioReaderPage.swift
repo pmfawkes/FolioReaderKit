@@ -169,7 +169,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         for highlight in highlights {
             let style = HighlightStyle.classForStyle(highlight.type)
             
-            let highlightAndReturn = webView?.js("recreateHighlight('\(highlight.id)','\(style)','\(highlight.startLocation)','\(highlight.endLocation)')")
+            let onClickAction = highlight.noteForHighlight == nil ? "callHighlightURL(this);" : "callHighlightWithNoteURL(this);"
+            webView?.js("recreateHighlight('\(highlight.id)','\(style)','\(onClickAction)','\(highlight.startLocation)','\(highlight.endLocation)')")
         }
     }
 

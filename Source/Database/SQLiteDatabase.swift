@@ -21,6 +21,7 @@ protocol SQLTable {
 
 class SQLiteDatabase {
     private let dbPointer: OpaquePointer?
+    var currentSchemaVersion = 1
     
     var errorMessage: String {
         if let errorPointer = sqlite3_errmsg(dbPointer) {
@@ -33,6 +34,10 @@ class SQLiteDatabase {
         
     private init(dbPointer: OpaquePointer?) {
         self.dbPointer = dbPointer
+        
+        guard let queryUserVersion = try? queryUserVersion(), let userVersion = queryUserVersion, userVersion != currentSchemaVersion else { return }
+        migrateToSchema(fromVersion: userVersion, toVersion: currentSchemaVersion)
+        try? setUserVersion()
     }
     
     deinit {
@@ -62,12 +67,49 @@ class SQLiteDatabase {
 }
 
 extension SQLiteDatabase {
+    func queryUserVersion() throws -> Int? {
+        let querySQL = "PRAGMA user_version;"
+        let queryStatement = try prepareStatement(sql: querySQL)
+        defer {
+            sqlite3_finalize(queryStatement)
+        }
+        guard sqlite3_step(queryStatement) == SQLITE_ROW else {
+            return nil
+        }
+        let userVersion = Int(sqlite3_column_int(queryStatement, 0))
+        return userVersion
+    }
+    
+    func setUserVersion() throws {
+        let setSQL = "PRAGMA user_version=\(currentSchemaVersion);"
+        let setStatement = try prepareStatement(sql: setSQL)
+        defer {
+            sqlite3_finalize(setStatement)
+        }
+        guard sqlite3_step(setStatement) == SQLITE_DONE else {
+            throw SQLiteError.Step(message: errorMessage)
+        }
+        
+        print("Successfully set schema version to \(currentSchemaVersion).")
+    }
+    
+    func migrateToSchema(fromVersion: Int, toVersion: Int) {
+        switch fromVersion + 1 {
+        case 1:
+            sqlite3_exec(dbPointer, "ALTER TABLE highlights ADD COLUMN startLocation TEXT;", nil, nil, nil);
+            sqlite3_exec(dbPointer, "ALTER TABLE highlights ADD COLUMN endLocation INTEGER;", nil, nil, nil);
+        default:
+            break;
+        }
+    }
+}
+
+extension SQLiteDatabase {
     func prepareStatement(sql: String) throws -> OpaquePointer? {
         var statement: OpaquePointer? = nil
         guard sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK else {
             throw SQLiteError.Prepare(message: errorMessage)
         }
-        
         return statement
     }
     
@@ -100,8 +142,8 @@ extension SQLiteDatabase {
             sqlite3_bind_int(insertStatement, 9, Int32(highlight.startOffset)) == SQLITE_OK,
             sqlite3_bind_int(insertStatement, 10, Int32(highlight.endOffset)) == SQLITE_OK,
             sqlite3_bind_text(insertStatement, 11, ((highlight.noteForHighlight ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK,
-            sqlite3_bind_text(insertStatement, 12, ((highlight.startLocation ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK,
-            sqlite3_bind_text(insertStatement, 13, ((highlight.endLocation ?? "") as NSString).utf8String, -1, nil) == SQLITE_OK else {
+            sqlite3_bind_text(insertStatement, 12, ((highlight.startLocation) as NSString).utf8String, -1, nil) == SQLITE_OK,
+            sqlite3_bind_text(insertStatement, 13, ((highlight.endLocation) as NSString).utf8String, -1, nil) == SQLITE_OK else {
                 throw SQLiteError.Bind(message: errorMessage)
         }
         

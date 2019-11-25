@@ -90,12 +90,7 @@ function getDOM(node, offset) {
         node = node.parentNode;
     }
     while (node != document.body) {
-        var index;
-        if ((node.parentElement.childNodes.length != node.parentElement.children.length) && node.parentElement.tagName == "P") {
-            index = Array.prototype.indexOf.call(node.parentElement.childNodes, node);
-        } else {
-            index = Array.prototype.indexOf.call(node.parentElement.children, node);
-        }
+        var index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
         tags.push(index);
         node = node.parentElement;
     }
@@ -107,18 +102,13 @@ function getDOM(node, offset) {
     return tags.join(",");
 }
 
-function recreateHighlight(id, style, startLocation, endLocation) {
+function recreateHighlight(id, style, onClickAction, startLocation, endLocation) {
     function recreateDOMFromString(str) {
         var dom = str.split(",").map(Number);
         var offset = dom.pop();
         var iterator = document.body;
         for (var i = 0; i < dom.length; i++) {
-            if (iterator.children.length > 0 &&
-                iterator.children.length == iterator.childNodes.length) {
-                iterator = iterator.children[dom[i]];
-            } else {
-                iterator = iterator.childNodes[dom[i]];
-            }
+            iterator = iterator.childNodes[dom[i]];
         }
         return [iterator, offset];
     }
@@ -136,7 +126,7 @@ function recreateHighlight(id, style, startLocation, endLocation) {
         }
         commonAncestorContainer = commonAncestorContainer.parentNode;
     } while (commonAncestorContainer != document.body);
-    highlightRange(id, style, startContainer, startOffset, endContainer, endOffset, commonAncestorContainer);
+    highlightRange(id, style, onClickAction, startContainer, startOffset, endContainer, endOffset, commonAncestorContainer);
 }
 
 function highlightString(style) {
@@ -190,9 +180,6 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
                 // breaking case, range.endContainer found
                 if (iterContainer == lastContainer) {
                     break;
-                } else if (iterContainer.children.length > 0 &&
-                           iterContainer.children.length == iterContainer.childNodes.length) {
-                    iterContainer = iterContainer.children[0];
                 } else if (iterContainer.childNodes.length > 0) {
                     iterContainer = iterContainer.childNodes[0];
                 }
@@ -241,6 +228,9 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
     for (var i = 0; i < ranges.length; i++) {
         var range = ranges[i];
         text.push(range.toString());
+        if (range.toString().trim() == "") {
+            continue;
+        }
         var selectionContents = range.extractContents();
         var elm = document.createElement("highlight");
         

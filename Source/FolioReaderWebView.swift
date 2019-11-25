@@ -157,7 +157,7 @@ open class FolioReaderWebView: UIWebView {
             }
 
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, startLocation: startLocation, endLocation: endLocation)
+            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
             DBAPIManager.shared.addHighlight(highlight: highlight)
 
         } catch {

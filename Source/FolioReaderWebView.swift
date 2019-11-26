@@ -122,7 +122,23 @@ open class FolioReaderWebView: UIWebView {
     func colors(_ sender: UIMenuController?) {
         isColors = true
         createMenu(options: false)
-        setMenuVisible(true)
+        
+        let highlightRect = js("getRectForThisHighlight();")
+        let jsonData = highlightRect?.data(using: String.Encoding.utf8)
+        
+        do {
+            guard let jsonData = jsonData,
+                let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray,
+                let dic = json.firstObject as? [String: String],
+                let dictRect = dic["rect"] else {
+                return
+            }
+            let rect = NSCoder.cgRect(for: dictRect)
+            createMenu(options: false)
+            setMenuVisible(true, andRect: rect)
+        } catch {
+            print("Could not receive JSON")
+        }
     }
 
     func remove(_ sender: UIMenuController?) {

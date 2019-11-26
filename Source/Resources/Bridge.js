@@ -225,6 +225,7 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
     }
     
     var text = [];
+    var thisHighlightHasSet = false;
     for (var i = 0; i < ranges.length; i++) {
         var range = ranges[i];
         text.push(range.toString());
@@ -236,15 +237,22 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
         
         elm.appendChild(selectionContents);
         elm.setAttribute("id", id);
-        elm.setAttribute("onclick","callHighlightURL(this);");
+        elm.setAttribute("onclick", onClickAction);
         elm.setAttribute("class", style);
         
         range.insertNode(elm);
-        if (i == 0) {
+        if (!thisHighlightHasSet) {
             thisHighlight = elm;
+            thisHighlightHasSet = true;
         }
     }
     return [elm, text.join("")];
+}
+
+function getRectForThisHighlight() {
+    var params = [];
+    params.push({rect: getRectForSelectedText(thisHighlight)});
+    return JSON.stringify(params);
 }
 
 function getHighlightId() {

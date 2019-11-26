@@ -139,6 +139,7 @@ function highlightString(style) {
     var result = highlightRange(id, style, onClickAction, range.startContainer, range.startOffset, range.endContainer, range.endOffset, range.commonAncestorContainer);
     var elm = result[0];
     var content = result[1];
+    addSelectionRange(result[2]);
     var params = [];
     params.push({id: id, rect: getRectForSelectedText(elm), startLocation: startLocation, endLocation: endLocation, content: content});
     
@@ -155,6 +156,7 @@ function highlightStringWithNote(style) {
     var result = highlightRange(id, style, onClickAction, range.startContainer, range.startOffset, range.endContainer, range.endOffset, range.commonAncestorContainer);
     var elm = result[0];
     var content = result[1];
+    addSelectionRange(result[2]);
     var params = [];
     params.push({id: id, rect: getRectForSelectedText(elm), startLocation: startLocation, endLocation: endLocation, content: content});
     
@@ -168,7 +170,7 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
     
     // special case: same node/element
     if (iterContainer == lastContainer) {
-        var range = new Range();
+        var range = document.createRange();
         range.setStart(iterContainer, startOffset);
         range.setEnd(iterContainer, endOffset);
         ranges.push(range);
@@ -189,19 +191,19 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
             if (isSelectingFirstNode) {
                 // 1. special treament for the first node
                 isSelectingFirstNode = false;
-                var range = new Range();
+                var range = document.createRange();
                 range.setStart(iterContainer, startOffset);
                 range.setEnd(iterContainer, iterContainer.length);
                 ranges.push(range);
             } else {
                 if (iterContainer.nodeType == Node.ELEMENT_NODE) {
                     for (var i = 0; i < iterContainer.childNodes.length; i++) {
-                        var range = new Range();
+                        var range = document.createRange();
                         range.selectNode(iterContainer.childNodes[i]);
                         ranges.push(range);
                     }
                 } else if (iterContainer.nodeType == Node.TEXT_NODE) {
-                    var range = new Range();
+                    var range = document.createRange();
                     range.selectNode(iterContainer);
                     ranges.push(range);
                 }
@@ -218,7 +220,7 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
         } while (true);
         
         // 3. select all nodes until the last Element
-        var range = new Range();
+        var range = document.createRange();
         range.setStart(iterContainer, 0);
         range.setEnd(iterContainer, endOffset);
         ranges.push(range);
@@ -246,7 +248,15 @@ function highlightRange(id, style, onClickAction, startContainer, startOffset, l
             thisHighlightHasSet = true;
         }
     }
-    return [elm, text.join("")];
+    return [thisHighlight, text.join(""), ranges];
+}
+
+function addSelectionRange(ranges) {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    for (var i = 0; i < ranges.length; i++) {
+        selection.addRange(ranges[i]);
+    }
 }
 
 function getRectForThisHighlight() {
@@ -269,13 +279,18 @@ function setHighlightStyle(style) {
 }
 
 function removeThisHighlight() {
-    thisHighlight.outerHTML = thisHighlight.innerHTML;
+    var highlightsWithSameId = document.querySelectorAll("highlight[id=\'" + thisHighlight.id + "\']")
+    for (var i = 0; i < highlightsWithSameId.length; i++) {
+        highlightsWithSameId[i].outerHTML = highlightsWithSameId[i].innerHTML;
+    }
     return thisHighlight.id;
 }
 
 function removeHighlightById(elmId) {
-    var elm = document.getElementById(elmId);
-    elm.outerHTML = elm.innerHTML;
+    var highlightsWithSameId = document.querySelectorAll("highlight[id=\'" + elmId + "\']")
+    for (var i = 0; i < highlightsWithSameId.length; i++) {
+        highlightsWithSameId[i].outerHTML = highlightsWithSameId[i].innerHTML;
+    }
     return elm.id;
 }
 

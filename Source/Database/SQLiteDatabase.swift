@@ -35,7 +35,7 @@ class SQLiteDatabase {
     private init(dbPointer: OpaquePointer?) {
         self.dbPointer = dbPointer
         
-        guard let queryUserVersion = try? queryUserVersion(), let userVersion = queryUserVersion, userVersion != currentSchemaVersion else { return }
+        guard let userVersion = try? queryUserVersion(), userVersion != currentSchemaVersion else { return }
         migrateToSchema(fromVersion: userVersion, toVersion: currentSchemaVersion)
         try? setUserVersion()
     }

@@ -214,7 +214,7 @@ html.nightMode, html.nightMode body {
     background-color: #131313 !important;
 }
 
-.nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing) {
+.nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing), .nightMode a, .nightMode i {
     color: #767676 !important;
     background-color: transparent !important;
 }

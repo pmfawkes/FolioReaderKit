@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import WebKit
 
 /// The custom WebView used in each page
-open class FolioReaderWebView: UIWebView {
+open class FolioReaderWebView: WKWebView {
     var isColors = false
     var isShare = false
     var isOneWord = false
@@ -30,14 +31,11 @@ open class FolioReaderWebView: UIWebView {
         return readerContainer.folioReader
     }
 
-    override init(frame: CGRect) {
-        fatalError("use init(frame:readerConfig:book:) instead.")
-    }
-
     init(frame: CGRect, readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
-
-        super.init(frame: frame)
+        let configuration = WKWebViewConfiguration()
+        configuration.setURLSchemeHandler(BookProvider(), forURLScheme: "bookprovider")
+        super.init(frame: frame, configuration: configuration)
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -79,13 +77,14 @@ open class FolioReaderWebView: UIWebView {
 
         let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
             if self.isShare {
-                if let textToShare = self.js("getHighlightContent()") {
+                self.js("getHighlightContent()") { (callback, error) in
+                    guard error == nil, let textToShare = callback as? String else { return }
                     self.folioReader.readerCenter?.presentQuoteShare(textToShare)
                 }
             } else {
-                if let textToShare = self.js("getSelectedText()") {
+                self.js("getSelectedText()") { (callback, error) in
+                    guard error == nil, let textToShare = callback as? String else { return }
                     self.folioReader.readerCenter?.presentQuoteShare(textToShare)
-
                     self.clearTextSelection()
                 }
             }
@@ -94,11 +93,13 @@ open class FolioReaderWebView: UIWebView {
 
         let shareText = UIAlertAction(title: self.readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
             if self.isShare {
-                if let textToShare = self.js("getHighlightContent()") {
+                self.js("getHighlightContent()") { (callback, error) in
+                    guard error == nil, let textToShare = callback as? String else { return }
                     self.folioReader.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
                 }
             } else {
-                if let textToShare = self.js("getSelectedText()") {
+                self.js("getHighlightContent()") { (callback, error) in
+                    guard error == nil, let textToShare = callback as? String else { return }
                     self.folioReader.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
                 }
             }
@@ -123,107 +124,126 @@ open class FolioReaderWebView: UIWebView {
         isColors = true
         createMenu(options: false)
         
-        let highlightRect = js("getRectForThisHighlight();")
-        let jsonData = highlightRect?.data(using: String.Encoding.utf8)
-        
-        do {
-            guard let jsonData = jsonData,
-                let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray,
-                let dic = json.firstObject as? [String: String],
-                let dictRect = dic["rect"] else {
-                return
+        js("getRectForThisHighlight();") { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let highlightRect = callback as? String else { return }
+            
+            let jsonData = highlightRect.data(using: String.Encoding.utf8)
+            
+            do {
+                guard let jsonData = jsonData,
+                    let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray,
+                    let dic = json.firstObject as? [String: String],
+                    let dictRect = dic["rect"] else {
+                    return
+                }
+                let rect = NSCoder.cgRect(for: dictRect)
+                strongSelf.createMenu(options: false)
+                strongSelf.setMenuVisible(true, andRect: rect)
+            } catch {
+                print("Could not receive JSON")
             }
-            let rect = NSCoder.cgRect(for: dictRect)
-            createMenu(options: false)
-            setMenuVisible(true, andRect: rect)
-        } catch {
-            print("Could not receive JSON")
         }
     }
 
     func remove(_ sender: UIMenuController?) {
-        if let removedId = js("removeThisHighlight()") {
+        js("removeThisHighlight()") { [weak self] (callback, error) in
+            guard error == nil, let removedId = callback as? String else { return }
             DBAPIManager.shared.removeHighlight(byId: removedId)
+            self?.setMenuVisible(false)
         }
-        setMenuVisible(false)
     }
     
     @objc func highlight(_ sender: UIMenuController?) {
-        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
-        let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
+        js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')") { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let highlightAndReturn = callback as? String else { return }
+            let jsonData = highlightAndReturn.data(using: String.Encoding.utf8)
 
-        do {
-            let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
-            let dic = json.firstObject as! [String: String]
-            guard let startLocation = dic["startLocation"],
-                let endLocation = dic["endLocation"],
-                let dictRect = dic["rect"],
-                let content = dic["content"] else {
-                return
-            }
-            let rect = NSCoder.cgRect(for: dictRect)
-            createMenu(options: true)
-            setMenuVisible(true, andRect: rect)
-
-            // Persist
-            guard let identifier = dic["id"],
-                let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
+            do {
+                let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
+                let dic = json.firstObject as! [String: String]
+                guard let startLocation = dic["startLocation"],
+                    let endLocation = dic["endLocation"],
+                    let dictRect = dic["rect"],
+                    let content = dic["content"] else {
                     return
+                }
+                let rect = NSCoder.cgRect(for: dictRect)
+                strongSelf.createMenu(options: true)
+                strongSelf.setMenuVisible(true, andRect: rect)
+
+                // Persist
+                guard let identifier = dic["id"],
+                    let bookId = (strongSelf.book.name as NSString?)?.deletingPathExtension else {
+                        return
+                }
+
+                let pageNumber = strongSelf.folioReader.readerCenter?.currentPageNumber ?? 0
+                let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: strongSelf.folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
+                DBAPIManager.shared.addHighlight(highlight: highlight)
+
+            } catch {
+                print("Could not receive JSON")
             }
-
-            let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
-            DBAPIManager.shared.addHighlight(highlight: highlight)
-
-        } catch {
-            print("Could not receive JSON")
         }
     }
     
     
     @objc func highlightWithNote(_ sender: UIMenuController?) {
-        let highlightAndReturn = js("highlightStringWithNote('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
-        let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
-        
-        do {
-            let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
-            let dic = json.firstObject as! [String: String]
-            guard let startLocation = dic["startLocation"],
-                let endLocation = dic["endLocation"],
-                let content = dic["content"] else {
-                    return
+        js("highlightStringWithNote('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')") { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let highlightAndReturn = callback as? String else { return }
+            let jsonData = highlightAndReturn.data(using: String.Encoding.utf8)
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
+                let dic = json.firstObject as! [String: String]
+                guard let startLocation = dic["startLocation"],
+                    let endLocation = dic["endLocation"],
+                    let content = dic["content"] else {
+                        return
+                }
+                strongSelf.clearTextSelection()
+                
+                guard let identifier = dic["id"] else { return }
+                guard let bookId = (strongSelf.book.name as NSString?)?.deletingPathExtension else { return }
+                
+                let pageNumber = strongSelf.folioReader.readerCenter?.currentPageNumber ?? 0
+                let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: strongSelf.folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
+                strongSelf.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
+            } catch {
+                print("Could not receive JSON")
             }
-            self.clearTextSelection()
-            
-            guard let identifier = dic["id"] else { return }
-            guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else { return }
-            
-            let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let highlight = Highlight(id: identifier, bookId: bookId, content: content, page: pageNumber, type: folioReader.currentHighlightStyle, startLocation: startLocation, endLocation: endLocation)
-            self.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
-        } catch {
-            print("Could not receive JSON")
         }
     }
     
     @objc func updateHighlightNote(_ sender: UIMenuController?) {
-        guard let highlightId = js("getHighlightId()") else { return }
-        guard let highlightNote = DBAPIManager.shared.getHighlight(byId: highlightId) else { return }
-        self.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
+        js("getHighlightId()") { [weak self] (callback, error) in
+            guard error == nil,
+                let highlightId = callback as? String else { return }
+            guard let highlightNote = DBAPIManager.shared.getHighlight(byId: highlightId) else { return }
+            self?.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
+        }
     }
 
     @objc func define(_ sender: UIMenuController?) {
-        guard let selectedText = js("getSelectedText()") else {
-            return
+        js("getSelectedText()") { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let selectedText = callback as? String else { return }
+            
+            strongSelf.setMenuVisible(false)
+            strongSelf.clearTextSelection()
+
+            let vc = UIReferenceLibraryViewController(term: selectedText)
+            vc.view.tintColor = strongSelf.readerConfig.tintColor
+            guard let readerContainer = strongSelf.readerContainer else { return }
+            readerContainer.show(vc, sender: nil)
         }
-
-        self.setMenuVisible(false)
-        self.clearTextSelection()
-
-        let vc = UIReferenceLibraryViewController(term: selectedText)
-        vc.view.tintColor = self.readerConfig.tintColor
-        guard let readerContainer = readerContainer else { return }
-        readerContainer.show(vc, sender: nil)
     }
 
     @objc func play(_ sender: UIMenuController?) {
@@ -255,12 +275,13 @@ open class FolioReaderWebView: UIWebView {
     func changeHighlightStyle(_ sender: UIMenuController?, style: HighlightStyle) {
         self.folioReader.currentHighlightStyle = style.rawValue
         
-        if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
+        js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") { [weak self] (callback, error) in
+            guard error == nil, let updateId = callback as? String else { return }
             DBAPIManager.shared.updateHighlight(id: updateId, type: style)
+            
+            //FIX: https://github.com/FolioReader/FolioReaderKit/issues/316
+            self?.setMenuVisible(false)
         }
-        
-        //FIX: https://github.com/FolioReader/FolioReaderKit/issues/316
-        setMenuVisible(false)
     }
     
     // MARK: - Create and show menu
@@ -359,10 +380,8 @@ open class FolioReaderWebView: UIWebView {
     
     // MARK: - Java Script Bridge
     
-    @discardableResult open func js(_ script: String) -> String? {
-        let callback = self.stringByEvaluatingJavaScript(from: script)
-        if callback!.isEmpty { return nil }
-        return callback
+    open func js(_ script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+        evaluateJavaScript(script, completionHandler: completionHandler)
     }
     
     // MARK: WebView
@@ -379,13 +398,10 @@ open class FolioReaderWebView: UIWebView {
         switch self.readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
             scrollView.isPagingEnabled = false
-            paginationMode = .unpaginated
             scrollView.bounces = true
             break
         case .horizontal:
             scrollView.isPagingEnabled = true
-            paginationMode = .leftToRight
-            paginationBreakingMode = .page
             scrollView.bounces = false
             break
         }

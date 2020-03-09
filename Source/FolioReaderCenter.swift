@@ -176,7 +176,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView?.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
 
         // Configure navigation bar and layout
-        automaticallyAdjustsScrollViewInsets = false
+//        automaticallyAdjustsScrollViewInsets = false
+        currentPage?.webView?.scrollView.contentInsetAdjustmentBehavior = .never
         extendedLayoutIncludesOpaqueBars = true
         configureNavBar()
 
@@ -652,17 +653,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         scrollScrubber?.setSliderVal()
 
-        if let readingTime = currentPage.webView?.js("getReadingTime()") {
-            pageIndicatorView?.totalMinutes = Int(readingTime)!
-        } else {
-            pageIndicatorView?.totalMinutes = 0
-        }
-        pagesForCurrentPage(currentPage)
+        currentPage.webView?.js("getReadingTime()", completionHandler: { [weak self] (callback, error) in
+            guard let strongSelf = self else { return }
+            if error == nil, let readingTime = callback as? String {
+                strongSelf.pageIndicatorView?.totalMinutes = Int(readingTime)!
+            } else {
+                strongSelf.pageIndicatorView?.totalMinutes = 0
+            }
+            strongSelf.pagesForCurrentPage(currentPage)
 
-        delegate?.pageDidAppear?(currentPage)
-        delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
-        
-        completion?()
+            strongSelf.delegate?.pageDidAppear?(currentPage)
+            strongSelf.delegate?.pageItemChanged?(strongSelf.getCurrentPageItemNumber())
+            
+            completion?()
+        })
     }
 
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
@@ -896,7 +900,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
         let chapterPercentage = Double(currentChapterSize) / Double(totalCharacterSize)
         
-        let totalPage = folioReader.readerCenter?.pageIndicatorView?.totalPages ?? 0
+//        let totalPage = folioReader.readerCenter?.pageIndicatorView?.totalPages ?? 0
+        let totalPage = 26
         let currentPage = folioReader.readerCenter?.pageIndicatorView?.currentPage ?? 0
         let currentChapterPagePercentage = Double(currentPage) / Double(totalPage)
         let currentProgress = totalProgressGivenCurrentChapter + chapterPercentage * currentChapterPagePercentage
@@ -1110,9 +1115,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     @objc func shareChapter(_ sender: UIBarButtonItem) {
         guard let currentPage = currentPage else { return }
 
-        if let chapterText = currentPage.webView?.js("getBodyText()") {
+        currentPage.webView?.js("getBodyText()", completionHandler: { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let chapterText = callback as? String else { return }
+            
             let htmlText = chapterText.replacingOccurrences(of: "[\\n\\r]+", with: "<br />", options: .regularExpression)
-            var subject = readerConfig.localizedShareChapterSubject
+            var subject = strongSelf.readerConfig.localizedShareChapterSubject
             var html = ""
             var text = ""
             var bookTitle = ""
@@ -1121,35 +1130,35 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             var shareItems = [AnyObject]()
 
             // Get book title
-            if let title = self.book.title {
+            if let title = strongSelf.book.title {
                 bookTitle = title
                 subject += " “\(title)”"
             }
 
             // Get chapter name
-            if let chapter = getCurrentChapterName() {
+            if let chapter = strongSelf.getCurrentChapterName() {
                 chapterName = chapter
             }
 
             // Get author name
-            if let author = self.book.metadata.creators.first {
+            if let author = strongSelf.book.metadata.creators.first {
                 authorName = author.name
             }
 
             // Sharing html and text
             html = "<html><body>"
             html += "<br /><hr> <p>\(htmlText)</p> <hr><br />"
-            html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
+            html += "<center><p style=\"color:gray\">"+strongSelf.readerConfig.localizedShareAllExcerptsFrom+"</p>"
             html += "<b>\(bookTitle)</b><br />"
-            html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
+            html += strongSelf.readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
 
-            if let bookShareLink = readerConfig.localizedShareWebLink {
+            if let bookShareLink = strongSelf.readerConfig.localizedShareWebLink {
                 html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
                 shareItems.append(bookShareLink as AnyObject)
             }
 
             html += "</center></body></html>"
-            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
+            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(strongSelf.readerConfig.localizedShareBy) \(authorName)"
 
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
             shareItems.insert(contentsOf: [act, "" as AnyObject], at: 0)
@@ -1162,8 +1171,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 actv.barButtonItem = sender
             }
 
-            present(activityViewController, animated: true, completion: nil)
-        }
+            strongSelf.present(activityViewController, animated: true, completion: nil)
+        })
     }
 
     /**
@@ -1307,11 +1316,15 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func updateUserTrackingLocation() {
-        if let currentPosition = currentPage?.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
-            let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) {
-            folioReader.savedPositionForCurrentBook = cfi
-            pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
-        }
+        
+        currentPage?.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))", completionHandler: { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let currentPosition = callback as? String,
+                let cfi = EpubCFI.generate(chapterIndex: strongSelf.currentPageNumber - 1, odmStr: currentPosition) else { return }
+            strongSelf.folioReader.savedPositionForCurrentBook = cfi
+            strongSelf.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
+        })
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -1464,13 +1477,13 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 
     private func scroll(_ page: FolioReaderPage, using cfi: CFI?) {
         guard let nodeJson = try? JSONEncoder().encode(cfi?.domIndices),
-            let nodeStr = String(data: nodeJson, encoding: .utf8),
-            let pageOffset = page.getReadingPositionOffset(value: nodeStr) else {
-                return
+            let nodeStr = String(data: nodeJson, encoding: .utf8) else { return }
+        page.getReadingPositionOffset(value: nodeStr) { (offset) in
+            guard let pageOffset = offset else { return }
+            page.scrollPageToOffset(pageOffset, animated: false)
         }
-        page.scrollPageToOffset(pageOffset, animated: false)
     }
-    
+
     public func pageDidLoad(_ page: FolioReaderPage) {
         if self.readerConfig.loadSavedPositionForCurrentBook {
             if isFirstLoad {

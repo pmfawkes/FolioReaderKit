@@ -24,7 +24,7 @@ internal let kHighlightRange = 30
 internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 public extension Notification.Name {
-    static let folioReaderPresentationComplete = Notification.Name("folioReaderPresentationComplete")
+    static let folioReaderPresentationCompleted = Notification.Name("folioReaderPresentationComplete")
 }
 
 public enum FolioReaderError: Error, LocalizedError {
@@ -173,11 +173,10 @@ extension FolioReader {
         Bool = true) {
         let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, decryptionKey: decryptionKey, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
-        let folioReaderTransitionDelegate = FolioReaderTransitionDelegate()
         readerContainer.modalPresentationStyle = .fullScreen
-        readerContainer.transitioningDelegate = folioReaderTransitionDelegate
+        readerContainer.transitioningDelegate = FolioReaderTransitionDelegate()
         parentViewController.present(readerContainer, animated: animated) {
-            NotificationCenter.default.post(name: .folioReaderPresentationComplete, object: nil)
+            NotificationCenter.default.post(name: .folioReaderPresentationCompleted, object: nil)
         }
         addObservers()
     }

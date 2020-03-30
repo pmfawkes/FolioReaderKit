@@ -360,19 +360,18 @@ extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
     @objc open func saveReaderState() {
-        guard isReaderOpen else {
-            return
-        }
-
-        guard let currentPage = self.readerCenter?.currentPage,
-            let currentPosition = currentPage.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))"),
-            let currentPageNumber = readerCenter?.currentPageNumber,
-            let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) else {
-            return
-        }
+        guard isReaderOpen, let currentPage = self.readerCenter?.currentPage else { return }
         
-        savedPositionForCurrentBook = cfi
-        readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
+        currentPage.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))", completionHandler: { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let currentPosition = callback as? String,
+                let currentPageNumber = strongSelf.readerCenter?.currentPageNumber,
+                let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition)
+                else { return }
+            strongSelf.savedPositionForCurrentBook = cfi
+            strongSelf.readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
+        })
     }
 
     /// Closes and save the reader current instance.

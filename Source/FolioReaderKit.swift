@@ -23,6 +23,10 @@ internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
+public extension Notification.Name {
+    static let folioReaderPresentationCompleted = Notification.Name("folioReaderPresentationComplete")
+}
+
 public enum FolioReaderError: Error, LocalizedError {
     case bookNotAvailable
     case errorInContainer
@@ -170,7 +174,10 @@ extension FolioReader {
         let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, decryptionKey: decryptionKey, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
         readerContainer.modalPresentationStyle = .fullScreen
-        parentViewController.present(readerContainer, animated: animated, completion: nil)
+        readerContainer.transitioningDelegate = FolioReaderTransitionDelegate()
+        parentViewController.present(readerContainer, animated: animated) {
+            NotificationCenter.default.post(name: .folioReaderPresentationCompleted, object: nil)
+        }
         addObservers()
     }
 }

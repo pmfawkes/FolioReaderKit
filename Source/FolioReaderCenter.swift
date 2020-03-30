@@ -8,7 +8,9 @@
 
 import UIKit
 //import ZFDragableModalTransition
-
+public extension Notification.Name {
+    static let pageDidLoadNotification = Notification.Name("pageDidAppearNotif")
+}
 /// Protocol which is used from `FolioReaderCenter`s.
 @objc public protocol FolioReaderCenterDelegate: class {
 
@@ -1519,6 +1521,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         
         // Pass the event to the centers `pageDelegate`
         pageDelegate?.pageDidLoad?(page)
+        NotificationCenter.default.post(name: .pageDidLoadNotification, object: nil)
     }
     
     public func pageWillLoad(_ page: FolioReaderPage) {

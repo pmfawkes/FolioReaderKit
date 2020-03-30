@@ -32,7 +32,7 @@ class FolioReaderAnimator: NSObject, UIViewControllerAnimatedTransitioning, Foli
         toView.alpha = 0
         let duration = transitionDuration(using: transitionContext)
         
-        pageDidLoadNotificationToken = NotificationCenter.default.addObserver(forName: .pageDidLoadNotif, object: nil, queue: .main, using: { [weak self] _ in
+        pageDidLoadNotificationToken = NotificationCenter.default.addObserver(forName: .pageDidLoadNotification, object: nil, queue: .main, using: { [weak self] _ in
             guard let strongSelf = self else {return}
             UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
                 toView.alpha = 1

@@ -121,6 +121,7 @@ open class FolioReader: NSObject {
     open weak var readerCenter: FolioReaderCenter? {
         return self.readerContainer?.centerViewController
     }
+    private let transitionDelegate = FolioReaderTransitionDelegate()
 
     /// Check if reader is open
     var isReaderOpen = false
@@ -174,7 +175,7 @@ extension FolioReader {
         let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, decryptionKey: decryptionKey, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
         readerContainer.modalPresentationStyle = .fullScreen
-        readerContainer.transitioningDelegate = FolioReaderTransitionDelegate()
+        readerContainer.transitioningDelegate = transitionDelegate
         parentViewController.present(readerContainer, animated: animated) {
             NotificationCenter.default.post(name: .folioReaderPresentationCompleted, object: nil)
         }

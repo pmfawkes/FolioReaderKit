@@ -320,19 +320,28 @@ html, body {
 }
 
 html {
-    background-color: #FFFFFF !important;
+    background-color: #231e4e !important;
 }
 
 body {
+    background-color: #231e4e !important;
+}
+
+p, div, span:not(.epub-media-overlay-playing), a, i {
+    color: #F9F4F2 !important;
     background-color: transparent !important;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: #F9F4F2 !important;
+}
+
 html.nightMode, html.nightMode body {
-    background-color: #131313 !important;
+    background-color: #000000 !important;
 }
 
 .nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing), .nightMode a, .nightMode i {
-    color: #767676 !important;
+    color: #F9F4F2 !important;
     background-color: transparent !important;
 }
 

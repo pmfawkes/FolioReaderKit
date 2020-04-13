@@ -23,21 +23,28 @@ internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
+public extension Notification.Name {
+    static let folioReaderPresentationCompleted = Notification.Name("folioReaderPresentationComplete")
+}
+
 public enum FolioReaderError: Error, LocalizedError {
     case bookNotAvailable
     case errorInContainer
     case errorInOpf
+    case errorInSmil
+    case errorInTOC
     case authorNameNotAvailable
     case coverNotAvailable
     case invalidImage(path: String)
     case titleNotAvailable
     case fullPathEmpty
+    case decrpytionFailed
 
     public var errorDescription: String? {
         switch self {
         case .bookNotAvailable:
             return "Book not found"
-        case .errorInContainer, .errorInOpf:
+        case .errorInContainer, .errorInOpf, .errorInSmil, .errorInTOC:
             return "Invalid book format"
         case .authorNameNotAvailable:
             return "Author name not available"
@@ -49,6 +56,8 @@ public enum FolioReaderError: Error, LocalizedError {
             return "Book title not available"
         case .fullPathEmpty:
             return "Book corrupted"
+        case .decrpytionFailed:
+            return "Book decryption failed"
         }
     }
 }
@@ -112,6 +121,7 @@ open class FolioReader: NSObject {
     open weak var readerCenter: FolioReaderCenter? {
         return self.readerContainer?.centerViewController
     }
+    private let transitionDelegate = FolioReaderTransitionDelegate()
 
     /// Check if reader is open
     var isReaderOpen = false
@@ -121,7 +131,7 @@ open class FolioReader: NSObject {
 
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {
-        return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
+        return (BookProvider.shared.currentBook.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
 
     func isNight<T>(_ f: T, _ l: T) -> T {
@@ -160,11 +170,15 @@ extension FolioReader {
     ///   - config: FolioReader configuration.
     ///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
+    open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, decryptionKey: String = "", animated:
         Bool = true) {
-        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
+        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, decryptionKey: decryptionKey, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
-        parentViewController.present(readerContainer, animated: animated, completion: nil)
+        readerContainer.modalPresentationStyle = .fullScreen
+        readerContainer.transitioningDelegate = transitionDelegate
+        parentViewController.present(readerContainer, animated: animated) {
+            NotificationCenter.default.post(name: .folioReaderPresentationCompleted, object: nil)
+        }
         addObservers()
     }
 }
@@ -290,18 +304,30 @@ extension FolioReader {
         }
     }
 
-    open var savedPositionForCurrentBook: [String: Any]? {
+    open var savedPositionForCurrentBook: CFI? {
         get {
-            guard let bookId = self.readerContainer?.book.name else {
+            guard let bookId = BookProvider.shared.currentBook.name,
+                let json = self.defaults.value(forKey: bookId) as? Data else {
                 return nil
             }
-            return self.defaults.value(forKey: bookId) as? [String : Any]
+            do {
+                let cfi = try JSONDecoder().decode(CFI.self, from: json)
+                return cfi
+            } catch {
+                print("decoding CFI failed")
+                return nil
+            }
         }
         set {
-            guard let bookId = self.readerContainer?.book.name else {
+            guard let bookId = BookProvider.shared.currentBook.name else {
                 return
             }
-            self.defaults.set(newValue, forKey: bookId)
+            do {
+                let json = try JSONEncoder().encode(newValue)
+                self.defaults.set(json, forKey: bookId)
+            } catch {
+                print("encoding CFI failed")
+            }
         }
     }
 }
@@ -335,21 +361,18 @@ extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
     @objc open func saveReaderState() {
-        guard isReaderOpen else {
-            return
-        }
-
-        guard let currentPage = self.readerCenter?.currentPage, let webView = currentPage.webView else {
-            return
-        }
-
-        let position = [
-            "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
-            "pageOffsetX": webView.scrollView.contentOffset.x,
-            "pageOffsetY": webView.scrollView.contentOffset.y
-            ] as [String : Any]
-
-        self.savedPositionForCurrentBook = position
+        guard isReaderOpen, let currentPage = self.readerCenter?.currentPage else { return }
+        
+        currentPage.webView?.js("getCurrentPosition(\(self.readerContainer?.readerConfig.scrollDirection == .horizontal))", completionHandler: { [weak self] (callback, error) in
+            guard error == nil,
+                let strongSelf = self,
+                let currentPosition = callback as? String,
+                let currentPageNumber = strongSelf.readerCenter?.currentPageNumber,
+                let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition)
+                else { return }
+            strongSelf.savedPositionForCurrentBook = cfi
+            strongSelf.readerCenter?.pageDelegate?.userCFIChanged?(cfi: cfi.standardizedFormat)
+        })
     }
 
     /// Closes and save the reader current instance.

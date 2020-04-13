@@ -6,6 +6,122 @@
  *  Copyright (c) 2015 Folio Reader. All rights reserved.
  */
 
+/*.andada, .andada p, .andada span, .andada div { font-family: "Andada", sans-serif !important; }*/
+/*.lato, .lato p, .lato span, .lato div { font-family: "Lato", serif !important; }*/
+/*.lora, .lora p, .lora span, .lora div { font-family: "Lora", serif !important; }*/
+/*.raleway, .raleway p, .raleway span, .raleway div { font-family: "Raleway", sans-serif !important; }*/
+@font-face { /* regular */
+    font-family: "Andada";
+    font-weight: normal;
+    font-style: normal;
+    src: url(Andada-Regular.otf);
+}
+
+@font-face { /* italic */
+    font-family: "Andada";
+    font-weight: normal;
+    font-style: italic;
+    src: url(Andada-Italic.otf);
+}
+
+@font-face { /* bold */
+    font-family: "Andada";
+    font-weight: bold;
+    font-style: normal;
+    src: url(Andada-Bold.otf);
+}
+
+@font-face { /* boldItalic*/
+    font-family: "Andada";
+    font-weight: bold;
+    font-style: italic;
+    src: url(Andada-BoldItalic.otf);
+}
+
+@font-face { /* regular */
+    font-family: "Lato";
+    font-weight: normal;
+    font-style: normal;
+    src: url(Lato-Regular.ttf);
+}
+
+@font-face { /* italic */
+    font-family: "Lato";
+    font-weight: normal;
+    font-style: italic;
+    src: url(Lato-Italic.ttf);
+}
+
+@font-face { /* bold */
+    font-family: "Lato";
+    font-weight: bold;
+    font-style: normal;
+    src: url(Lato-Bold.ttf);
+}
+
+@font-face { /* boldItalic*/
+    font-family: "Lato";
+    font-weight: bold;
+    font-style: italic;
+    src: url(Lato-BoldItalic.ttf);
+}
+
+@font-face { /* regular */
+    font-family: "Lora";
+    font-weight: normal;
+    font-style: normal;
+    src: url(Lora-Regular.ttf);
+}
+
+@font-face { /* italic */
+    font-family: "Lora";
+    font-weight: normal;
+    font-style: italic;
+    src: url(Lora-Italic.ttf);
+}
+
+@font-face { /* bold */
+    font-family: "Lora";
+    font-weight: bold;
+    font-style: normal;
+    src: url(Lora-Bold.ttf);
+}
+
+@font-face { /* boldItalic*/
+    font-family: "Lora";
+    font-weight: bold;
+    font-style: italic;
+    src: url(Lora-BoldItalic.ttf);
+}
+
+@font-face { /* regular */
+    font-family: "Raleway";
+    font-weight: normal;
+    font-style: normal;
+    src: url(Raleway-Regular.ttf);
+}
+
+@font-face { /* italic */
+    font-family: "Raleway";
+    font-weight: normal;
+    font-style: italic;
+    src: url(Raleway-Italic.ttf);
+}
+
+@font-face { /* bold */
+    font-family: "Raleway";
+    font-weight: bold;
+    font-style: normal;
+    src: url(Raleway-Bold.ttf);
+}
+
+@font-face { /* boldItalic*/
+    font-family: "Raleway";
+    font-weight: bold;
+    font-style: italic;
+    src: url(Raleway-BoldItalic.ttf);
+}
+
 /* CSS Reset */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -34,12 +150,13 @@ footer, header, hgroup, menu, nav, section {
 html {
     -webkit-text-size-adjust: none; /* Never autoresize text */
     padding: 0 0 !important;
-    overflow: hidden;
 }
 
 body {
     padding: 40px 20px !important;
-    overflow: hidden !important;
+    overflow: paged-x;
+    overflow: -webkit-paged-x;
+    overflow: -o-paged-x;
 }
 
 * {
@@ -214,7 +331,7 @@ html.nightMode, html.nightMode body {
     background-color: #131313 !important;
 }
 
-.nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing) {
+.nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing), .nightMode a, .nightMode i {
     color: #767676 !important;
     background-color: transparent !important;
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-import RealmSwift
+//import RealmSwift
 
 // MARK: - FolioReaderScrollDirection
 
@@ -176,7 +176,7 @@ open class FolioReaderConfig: NSObject {
     // MARK: Realm
 
     /// Realm configuration for storing highlights
-    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
+//    open var realmConfiguration = Realm.Configuration(schemaVersion: 2)
 
     // MARK: Localized strings
 
@@ -205,6 +205,7 @@ open class FolioReaderConfig: NSObject {
     open var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
     open var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
     open var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
+    open var localizedPercentageOfBookCompleted = NSLocalizedString("book completed", comment: "")
     open var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
     open var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
     open var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")

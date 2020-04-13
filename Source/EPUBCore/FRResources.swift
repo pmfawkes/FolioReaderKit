@@ -72,7 +72,13 @@ open class FRResources: NSObject {
 
         // This clean is neede because may the toc.ncx is not located in the root directory
         let cleanHref = href.replacingOccurrences(of: "../", with: "")
-        return resources[cleanHref]
+        if let resource = resources[cleanHref] {
+            return resource
+        }
+        if let resourceHref = resources.keys.first(where: { $0.contains(href) }) {
+            return resources[resourceHref]
+        }
+        return nil
     }
 
     /**

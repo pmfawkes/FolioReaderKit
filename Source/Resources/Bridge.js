@@ -81,47 +81,187 @@ function setFontSize(cls) {
 /*
  *	Native bridge Highlight text
  */
+
+function getDOM(node, offset) {
+    var tags = []
+    while (node.nodeType != Node.ELEMENT_NODE) {
+        var index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
+        tags.push(index);
+        node = node.parentNode;
+    }
+    while (node != document.body) {
+        var index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
+        tags.push(index);
+        node = node.parentElement;
+    }
+    
+    var result = tags.reverse();
+    result.push(offset);
+    console.log(result);
+    
+    return tags.join(",");
+}
+
+function recreateHighlight(id, style, onClickAction, startLocation, endLocation) {
+    function recreateDOMFromString(str) {
+        var dom = str.split(",").map(Number);
+        var offset = dom.pop();
+        var iterator = document.body;
+        for (var i = 0; i < dom.length; i++) {
+            iterator = iterator.childNodes[dom[i]];
+        }
+        return [iterator, offset];
+    }
+    var startTuple = recreateDOMFromString(startLocation);
+    var startContainer = startTuple[0];
+    var startOffset = startTuple[1];
+    var endTuple = recreateDOMFromString(endLocation);
+    var endContainer = endTuple[0];
+    var endOffset = endTuple[1];
+    
+    var commonAncestorContainer = startContainer;
+    do {
+        if (commonAncestorContainer.contains(endContainer)) {
+            break;
+        }
+        commonAncestorContainer = commonAncestorContainer.parentNode;
+    } while (commonAncestorContainer != document.body);
+    highlightRange(id, style, onClickAction, startContainer, startOffset, endContainer, endOffset, commonAncestorContainer);
+}
+
 function highlightString(style) {
     var range = window.getSelection().getRangeAt(0);
-    var startOffset = range.startOffset;
-    var endOffset = range.endOffset;
-    var selectionContents = range.extractContents();
-    var elm = document.createElement("highlight");
+    var startLocation = getDOM(range.startContainer, range.startOffset);
+    var endLocation = getDOM(range.endContainer, range.endOffset);
     var id = guid();
+    var onClickAction = "callHighlightURL(this);";
     
-    elm.appendChild(selectionContents);
-    elm.setAttribute("id", id);
-    elm.setAttribute("onclick","callHighlightURL(this);");
-    elm.setAttribute("class", style);
-    
-    range.insertNode(elm);
-    thisHighlight = elm;
-    
+    var result = highlightRange(id, style, onClickAction, range.startContainer, range.startOffset, range.endContainer, range.endOffset, range.commonAncestorContainer);
+    var elm = result[0];
+    var content = result[1];
+    addSelectionRange(result[2]);
     var params = [];
-    params.push({id: id, rect: getRectForSelectedText(elm), startOffset: startOffset.toString(), endOffset: endOffset.toString()});
+    params.push({id: id, rect: getRectForSelectedText(elm), startLocation: startLocation, endLocation: endLocation, content: content});
     
     return JSON.stringify(params);
 }
 
 function highlightStringWithNote(style) {
     var range = window.getSelection().getRangeAt(0);
-    var startOffset = range.startOffset;
-    var endOffset = range.endOffset;
-    var selectionContents = range.extractContents();
-    var elm = document.createElement("highlight");
+    var startLocation = getDOM(range.startContainer, range.startOffset);
+    var endLocation = getDOM(range.endContainer, range.endOffset);
     var id = guid();
+    var onClickAction = "callHighlightWithNoteURL(this);";
     
-    elm.appendChild(selectionContents);
-    elm.setAttribute("id", id);
-    elm.setAttribute("onclick","callHighlightWithNoteURL(this);");
-    elm.setAttribute("class", style);
-    
-    range.insertNode(elm);
-    thisHighlight = elm;
-    
+    var result = highlightRange(id, style, onClickAction, range.startContainer, range.startOffset, range.endContainer, range.endOffset, range.commonAncestorContainer);
+    var elm = result[0];
+    var content = result[1];
+    addSelectionRange(result[2]);
     var params = [];
-    params.push({id: id, rect: getRectForSelectedText(elm), startOffset: startOffset.toString(), endOffset: endOffset.toString()});
+    params.push({id: id, rect: getRectForSelectedText(elm), startLocation: startLocation, endLocation: endLocation, content: content});
     
+    return JSON.stringify(params);
+}
+
+function highlightRange(id, style, onClickAction, startContainer, startOffset, lastContainer, endOffset, commonAncestorContainer) {
+    var ranges = [];
+    var body = document.body;
+    var iterContainer = startContainer;
+    
+    // special case: same node/element
+    if (iterContainer == lastContainer) {
+        var range = document.createRange();
+        range.setStart(iterContainer, startOffset);
+        range.setEnd(iterContainer, endOffset);
+        ranges.push(range);
+    } else {
+        var isSelectingFirstNode = true;
+        // Select all nodes/elements until endContainer is targeted
+        do {
+            if (iterContainer.contains(lastContainer)) {
+                // breaking case, range.endContainer found
+                if (iterContainer == lastContainer) {
+                    break;
+                } else if (iterContainer.childNodes.length > 0) {
+                    iterContainer = iterContainer.childNodes[0];
+                }
+                continue;
+            }
+            
+            if (isSelectingFirstNode) {
+                // 1. special treament for the first node
+                isSelectingFirstNode = false;
+                var range = document.createRange();
+                range.setStart(iterContainer, startOffset);
+                range.setEnd(iterContainer, iterContainer.length);
+                ranges.push(range);
+            } else {
+                if (iterContainer.nodeType == Node.ELEMENT_NODE) {
+                    for (var i = 0; i < iterContainer.childNodes.length; i++) {
+                        var range = document.createRange();
+                        range.selectNode(iterContainer.childNodes[i]);
+                        ranges.push(range);
+                    }
+                } else if (iterContainer.nodeType == Node.TEXT_NODE) {
+                    var range = document.createRange();
+                    range.selectNode(iterContainer);
+                    ranges.push(range);
+                }
+            }
+            
+            while (iterContainer != commonAncestorContainer) {
+                if (iterContainer.nextSibling != null) {
+                    iterContainer = iterContainer.nextSibling;
+                    break;
+                } else {
+                    iterContainer = iterContainer.parentNode;
+                }
+            };
+        } while (true);
+        
+        // 3. select all nodes until the last Element
+        var range = document.createRange();
+        range.setStart(iterContainer, 0);
+        range.setEnd(iterContainer, endOffset);
+        ranges.push(range);
+    }
+    
+    var text = [];
+    var thisHighlightHasSet = false;
+    for (var i = 0; i < ranges.length; i++) {
+        var range = ranges[i];
+        text.push(range.toString());
+        if (range.toString().trim() == "") {
+            continue;
+        }
+        var selectionContents = range.extractContents();
+        var elm = document.createElement("highlight");
+        
+        elm.appendChild(selectionContents);
+        elm.setAttribute("id", id);
+        elm.setAttribute("onclick", onClickAction);
+        elm.setAttribute("class", style);
+        
+        range.insertNode(elm);
+        if (!thisHighlightHasSet) {
+            thisHighlight = elm;
+            thisHighlightHasSet = true;
+        }
+    }
+    return [thisHighlight, text.join(""), ranges];
+}
+
+function addSelectionRange(ranges) {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    for (var i = 0; i < ranges.length; i++) {
+        selection.addRange(ranges[i]);
+    }
+}
+
+function getRectForThisHighlight() {
+    var params = [];
+    params.push({rect: getRectForSelectedText(thisHighlight)});
     return JSON.stringify(params);
 }
 
@@ -131,18 +271,26 @@ function getHighlightId() {
 
 // Menu colors
 function setHighlightStyle(style) {
-    thisHighlight.className = style;
+    var highlightsWithSameId = document.querySelectorAll("highlight[id=\'" + thisHighlight.id + "\']")
+    for (var i = 0; i < highlightsWithSameId.length; i++) {
+        highlightsWithSameId[i].className = style;
+    }
     return thisHighlight.id;
 }
 
 function removeThisHighlight() {
-    thisHighlight.outerHTML = thisHighlight.innerHTML;
+    var highlightsWithSameId = document.querySelectorAll("highlight[id=\'" + thisHighlight.id + "\']")
+    for (var i = 0; i < highlightsWithSameId.length; i++) {
+        highlightsWithSameId[i].outerHTML = highlightsWithSameId[i].innerHTML;
+    }
     return thisHighlight.id;
 }
 
 function removeHighlightById(elmId) {
-    var elm = document.getElementById(elmId);
-    elm.outerHTML = elm.innerHTML;
+    var highlightsWithSameId = document.querySelectorAll("highlight[id=\'" + elmId + "\']")
+    for (var i = 0; i < highlightsWithSameId.length; i++) {
+        highlightsWithSameId[i].outerHTML = highlightsWithSameId[i].innerHTML;
+    }
     return elm.id;
 }
 
@@ -168,7 +316,7 @@ var getRectForSelectedText = function(elm) {
     return "{{" + rect.left + "," + rect.top + "}, {" + rect.width + "," + rect.height + "}}";
 }
 
-// Method that call that a hightlight was clicked
+// Method that call that a highlight was clicked
 // with URL scheme and rect informations
 var callHighlightURL = function(elm) {
 	event.stopPropagation();
@@ -179,7 +327,7 @@ var callHighlightURL = function(elm) {
     window.location = URLBase + encodeURIComponent(currentHighlightRect);
 }
 
-// Method that call that a hightlight with note was clicked
+// Method that call that a highlight with note was clicked
 // with URL scheme and rect informations
 var callHighlightWithNoteURL = function(elm) {
     event.stopPropagation();
@@ -300,7 +448,7 @@ function goToEl(el) {
     var bottom = window.innerHeight + document.body.scrollTop;
     var elBottom = el.offsetHeight + el.offsetTop + 60
 
-    if(elBottom > bottom || elTop < top) {
+    if (elBottom > bottom || elTop < top) {
         document.body.scrollTop = el.offsetTop - 20
     }
     
@@ -311,7 +459,7 @@ function goToEl(el) {
         height to figure out what page the element should appear on and set scroll left
         to scroll to that page.
     */
-    if( document.body.scrollTop == 0 ){
+    if (document.body.scrollTop == 0) {
         var elLeft = document.body.clientWidth * Math.floor(el.offsetTop / window.innerHeight);
         document.body.scrollLeft = elLeft;
     }
@@ -651,4 +799,58 @@ var onClassBasedListenerClick = function(schemeName, attributeContent) {
 	var positionParameterString = "/clientX=" + event.clientX + "&clientY=" + event.clientY;
 	// Set the custom link URL to the event
 	window.location = schemeName + "://" + attributeContent + positionParameterString;
+}
+
+
+function getReadingPositionOffset(isHorizontal, tagIndices) {
+    var elm = document.body;
+    for (i = 0; i < tagIndices.length; i++) {
+        elm = elm.children[tagIndices[i]];
+    }
+    return getElementOffset(elm, isHorizontal);
+}
+
+// Get Element offset in the page
+var getElementOffset = function(target, horizontal) {
+    if (horizontal) {
+        return document.body.clientWidth * Math.floor(target.offsetTop / window.innerHeight);
+    }
+    return target.offsetTop;
+}
+
+
+//Get Read Position Implementation
+function isVisible(el, isHorizontal) {
+    var rect = el.getBoundingClientRect();
+    var isVisible;
+    if (isHorizontal) {
+        isVisible = (rect.left >= 0 || rect.right >= 0) && rect.top >= 0;
+    } else {
+        isVisible = rect.top >= 0 || rect.bottom >= 0;
+    }
+    return isVisible;
+}
+
+function getVisibleChild(parent, isHorizontal) {
+    var children = parent.children, visibleChild;
+    for (var i = 0; i < children.length; i++) {
+        if (isVisible(children[i], isHorizontal)) {
+            visibleChild = children[i];
+            break;
+        }
+    }
+    return visibleChild;
+}
+
+function getCurrentPosition(isHorizontal) {
+    var parent = document.body;
+    var parentTags = [];
+    
+    while (parent !== null && parent.children !== null && parent.children.length != 0) {
+        var childNode = getVisibleChild(parent, isHorizontal);
+        var index = Array.prototype.indexOf.call(parent.children, childNode);
+        parentTags.push({"tag": childNode.nodeName, "id": childNode.id, "index": index});
+        parent = childNode;
+    }
+    return JSON.stringify(parentTags);
 }

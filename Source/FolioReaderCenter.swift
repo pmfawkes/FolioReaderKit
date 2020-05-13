@@ -453,7 +453,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.setup(withReaderContainer: readerContainer)
-        cell.pageNumber = indexPath.row+1
+        cell.pageNumber = indexPath.row + 1
         cell.webView?.scrollView.delegate = self
         if #available(iOS 11.0, *) {
             cell.webView?.scrollView.contentInsetAdjustmentBehavior = .never
@@ -461,7 +461,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         cell.webView?.setupScrollDirection()
         cell.webView?.frame = cell.webViewFrame()
         cell.delegate = self
-        cell.backgroundColor = .clear
+        cell.backgroundColor = folioReader.isNight(self.readerConfig.nightModeBackground, self.readerConfig.daysModeBackground)
 
         setPageProgressiveDirection(cell)
 
@@ -642,7 +642,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             currentPage = collectionView.cellForItem(at: currentIndexPath) as? FolioReaderPage
 
             self.previousPageNumber = currentIndexPath.row
-            self.currentPageNumber = currentIndexPath.row+1
+            self.currentPageNumber = currentIndexPath.row + 1
         }
 
         self.nextPageNumber = (((self.currentPageNumber + 1) <= totalPages) ? (self.currentPageNumber + 1) : self.currentPageNumber)
@@ -657,8 +657,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         currentPage.webView?.js("getReadingTime()", completionHandler: { [weak self] (callback, error) in
             guard let strongSelf = self else { return }
-            if error == nil, let readingTime = callback as? String {
-                strongSelf.pageIndicatorView?.totalMinutes = Int(readingTime)!
+            if error == nil, let readingTime = callback as? Int {
+                strongSelf.pageIndicatorView?.totalMinutes = readingTime
             } else {
                 strongSelf.pageIndicatorView?.totalMinutes = 0
             }
@@ -731,7 +731,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     open func changePageWith(page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
-        if (self.currentPageNumber == page) {
+        if self.currentPageNumber == page {
             if let currentPage = currentPage , fragment != "" {
                 currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
             }
@@ -894,6 +894,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
             progressCharacterSize += html.count
         }
+        guard totalCharacterSize > 0 else { return 0.0 }
         let totalProgressGivenCurrentChapter = Double(progressCharacterSize) / Double(totalCharacterSize)
         
         guard let htmlData = book.spine.spineReferences[currentChapterIndex - 1].resource.data,
@@ -902,9 +903,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
         let chapterPercentage = Double(currentChapterSize) / Double(totalCharacterSize)
         
-//        let totalPage = folioReader.readerCenter?.pageIndicatorView?.totalPages ?? 0
-        let totalPage = 26
+        let totalPage = folioReader.readerCenter?.pageIndicatorView?.totalPages ?? 0
         let currentPage = folioReader.readerCenter?.pageIndicatorView?.currentPage ?? 0
+        guard totalPage > 0 else { return 0.0 }
         let currentChapterPagePercentage = Double(currentPage) / Double(totalPage)
         let currentProgress = totalProgressGivenCurrentChapter + chapterPercentage * currentChapterPagePercentage
         return currentProgress

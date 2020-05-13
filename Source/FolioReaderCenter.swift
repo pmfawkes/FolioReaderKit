@@ -894,6 +894,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
             progressCharacterSize += html.count
         }
+        guard totalCharacterSize > 0 else { return 0.0 }
         let totalProgressGivenCurrentChapter = Double(progressCharacterSize) / Double(totalCharacterSize)
         
         guard let htmlData = book.spine.spineReferences[currentChapterIndex - 1].resource.data,
@@ -904,6 +905,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         
         let totalPage = folioReader.readerCenter?.pageIndicatorView?.totalPages ?? 0
         let currentPage = folioReader.readerCenter?.pageIndicatorView?.currentPage ?? 0
+        guard totalPage > 0 else { return 0.0 }
         let currentChapterPagePercentage = Double(currentPage) / Double(totalPage)
         let currentProgress = totalProgressGivenCurrentChapter + chapterPercentage * currentChapterPagePercentage
         return currentProgress

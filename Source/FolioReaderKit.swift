@@ -200,10 +200,11 @@ extension FolioReader {
             if let readerCenter = self.readerCenter {
                 UIView.animate(withDuration: 0.6, animations: {
                     _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))")
+                    readerCenter.currentPage?.backgroundColor = self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : self.readerContainer?.readerConfig.daysModeBackground
                     readerCenter.pageIndicatorView?.reloadColors()
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber?.reloadColors()
-                    readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : self.readerContainer?.readerConfig.daysModeBackground)
+                    readerCenter.collectionView.backgroundColor = self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : self.readerContainer?.readerConfig.daysModeBackground
                 }, completion: { (finished: Bool) in
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
                 })

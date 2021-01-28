@@ -19,6 +19,7 @@ let package = Package(
 		.package(url: "https://github.com/ArtSabintsev/FontBlaster.git", from: "4.0.0"),
 		.package(url: "https://github.com/fantim/JSQWebViewController.git", from: "6.1.0"),
 		.package(url: "https://github.com/realm/realm-cocoa.git", from: "3.1.0"),
+		.package(url: "https://github.com/tsolomko/SWCompression.git", from: "4.5.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -26,7 +27,7 @@ let package = Package(
         // "ZipArchive", "MenuItemKit", "ZFDragableModalTransition", AEXML", "FontBlaster", "JSQWebViewController", "Realm"
         .target(
             name: "FolioReaderKit",
-            dependencies: ["AEXML"],
+            dependencies: ["AEXML", "SWCompression"],
             path: "Source"),
     ]
 )

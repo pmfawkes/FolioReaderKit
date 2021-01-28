@@ -29,6 +29,6 @@ let package = Package(
         .target(
             name: "FolioReaderKit",
             dependencies: ["AEXML", "SWCompression", "FontBlaster", "MenuItemKit"],
-            sources: ["Vendor", "Source"]),
+            path: "Source"),
     ]
 )

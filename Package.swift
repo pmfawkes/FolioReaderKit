@@ -30,6 +30,6 @@ let package = Package(
             name: "FolioReaderKit",
             dependencies: ["AEXML", "SWCompression", "FontBlaster", "MenuItemKit"],
             path: "Source",
-            sources: ["Vendor"]),
+            sources: ["Vendor", "Source"]),
     ]
 )

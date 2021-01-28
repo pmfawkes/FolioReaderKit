@@ -12,13 +12,13 @@ let package = Package(
             targets: ["FolioReaderKit"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/ZipArchive/ZipArchive.git", majorVersion: 2, minor: 1),
-		.package(url: "https://github.com/cxa/MenuItemKit.git", majorVersion: 3, minor: 0),
-		.package(url: "https://github.com/zoonooz/ZFDragableModalTransition.git", majorVersion: 0, minor: 6),
-		.package(url: "https://github.com/tadija/AEXML.git", majorVersion: 4, minor: 2),
-		.package(url: "https://github.com/ArtSabintsev/FontBlaster.git", majorVersion: 4, minor: 0),
-		.package(url: "https://github.com/fantim/JSQWebViewController.git", majorVersion: 6, minor: 1),
-		.package(url: "https://github.com/realm/realm-cocoa.git", majorVersion: 3, minor: 1),
+		.package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.1.0"),
+		.package(url: "https://github.com/cxa/MenuItemKit.git", from: "3.0.0"),
+		.package(url: "https://github.com/zoonooz/ZFDragableModalTransition.git", from: "0.6.0"),
+		.package(url: "https://github.com/tadija/AEXML.git", from: "4.2.0"),
+		.package(url: "https://github.com/ArtSabintsev/FontBlaster.git", from: "4.0.0"),
+		.package(url: "https://github.com/fantim/JSQWebViewController.git", from: "6.1.0"),
+		.package(url: "https://github.com/realm/realm-cocoa.git", from: "3.1.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

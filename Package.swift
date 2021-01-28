@@ -16,7 +16,7 @@ let package = Package(
 		.package(url: "https://github.com/cxa/MenuItemKit.git", from: "3.0.0"),
 		.package(url: "https://github.com/zoonooz/ZFDragableModalTransition.git", from: "0.6.0"),
 		.package(url: "https://github.com/tadija/AEXML.git", from: "4.2.0"),
-		.package(url: "https://github.com/ArtSabintsev/FontBlaster.git", from: "4.0.0"),
+		.package(url: "https://github.com/ArtSabintsev/FontBlaster.git", from: "5.1.3"),
 		.package(url: "https://github.com/fantim/JSQWebViewController.git", from: "6.1.0"),
 		.package(url: "https://github.com/realm/realm-cocoa.git", from: "3.1.0"),
 		.package(url: "https://github.com/tsolomko/SWCompression.git", from: "4.5.1"),

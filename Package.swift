@@ -28,7 +28,7 @@ let package = Package(
         // "ZipArchive", "MenuItemKit", "ZFDragableModalTransition", AEXML", "FontBlaster", "JSQWebViewController", "Realm"
         .target(
             name: "FolioReaderKit",
-            dependencies: ["AEXML", "SWCompression", "FontBlaster"],
+            dependencies: ["AEXML", "SWCompression", "FontBlaster", "MenuItemKit"],
             path: "Source"),
     ]
 )

@@ -22,7 +22,6 @@ Pod::Spec.new do |s|
   s.source_files = [
     'Source/*.{h,swift}',
     'Source/**/*.swift',
-    'Vendor/**/*.swift',
   ]
   s.resource_bundles = {
     'FolioReader' => ['Source/**/*.{js,css}',

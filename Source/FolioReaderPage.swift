@@ -152,11 +152,11 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
             
             // TODO: It's very hard to check if WKWebView has loaded all the resources, we use the hack from this post https://stackoverflow.com/questions/45677288/wkwebview-requires-delay-to-set-its-scrollviews-contentoffset-and-zoomscale-aft
             // This solution is not guranteed to work all the time but 
-            guard repeatedCount >= 3 && didFinishNavigation else { return }
+            guard repeatedCount >= 1 && didFinishNavigation else { return }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.webViewDidFinishLoadingPage()
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                self.webViewDidFinishLoadingPage()
+//            }
             repeatedCount = 0
             didFinishNavigation = false
         default:
@@ -210,11 +210,7 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     
     // MARK: - WKWebView Delegate
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        didFinishNavigation = true
-    }
-    
-    public func webViewDidFinishLoadingPage() {
-        guard let webView = webView else {
+        guard let webView = webView as? FolioReaderWebView else {
             return
         }
 
@@ -236,18 +232,27 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
 
         let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
 
-        if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
-            self.folioReader.readerCenter?.isScrolling == true &&
-            self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
-            scrollPageToBottom()
-        }
+//        webView.js("document.readyState") { _, _ in
+//            webView.js("document.documentElement.scrollWidth") { [weak self] width, error in
+//                guard let self = self else { return }
+                if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
+                    self.folioReader.readerCenter?.isScrolling == true &&
+                    self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
+                    self.scrollPageToBottom()
+                }
 
-        UIView.animate(withDuration: 0.2, animations: {webView.alpha = 1}, completion: { finished in
-            webView.isColors = false
-            self.webView?.createMenu(options: false)
-        })
+                UIView.animate(withDuration: 0.2, animations: {webView.alpha = 1}, completion: { finished in
+                    webView.isColors = false
+                    self.webView?.createMenu(options: false)
+                })
 
-        delegate?.pageDidLoad?(self)
+                webView.js("document.readyState") { [weak self] (_, _) in
+                    guard let self = self else { return }
+                    self.delegate?.pageDidLoad?(self)
+                }
+//            }
+//        }
+        
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -448,16 +453,23 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
      */
     open func scrollPageToBottom() {
         guard let webView = webView else { return }
-        let bottomOffset = self.readerConfig.isDirection(
+        let bottomOffset = readerConfig.isDirection(
             CGPoint(x: 0, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0)
         )
-
-        guard bottomOffset.forDirection(withConfiguration: self.readerConfig) >= 0 else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            self.webView?.scrollView.setContentOffset(bottomOffset, animated: false)
+        print("1  \n\(#function) \nbottomOffset: \(bottomOffset)")
+        print("asdf - webView.scrollView: \(webView.scrollView)")
+        guard bottomOffset.forDirection(withConfiguration: readerConfig) >= 0 else { return }
+        
+        print("asdf - set content offset")
+        webView.scrollView.layoutIfNeeded()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            webView.scrollView.setContentOffset(bottomOffset, animated: false)
+            print("asdf - content offset: \(webView.scrollView.contentOffset)")
+            print("\n")
         }
+        
     }
 
     /**
@@ -498,8 +510,11 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     func getAnchorOffset(_ anchor: String, completion: @escaping ((CGFloat?) -> Void)) {
         let horizontal = self.readerConfig.scrollDirection == .horizontal
         webView?.js("getAnchorOffset('\(anchor)', \(horizontal.description))", completionHandler: { (callback, error) in
-            guard error == nil, let offset = callback as? CGFloat else { completion(nil); return }
-            completion(offset)
+            guard error == nil, let offset = callback as? NSString else {
+                completion(CGFloat(0))
+                return
+            }
+            completion(CGFloat(offset.floatValue))
         })
     }
     
@@ -567,6 +582,8 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
                 let lastPageHeight = frameHeight * CGFloat(1) - CGFloat(Double(contentHeight))
                 self?.colorView.frame = CGRect(x: webView.frame.width * CGFloat(0), y: webView.frame.height - lastPageHeight, width: webView.frame.width, height: lastPageHeight)
             }
+        } else {
+            colorView.frame = .zero
         }
     }
     

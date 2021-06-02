@@ -1,52 +1,52 @@
 PODS:
   - AEXML (4.3.3)
-  - BitByteData (1.4.1)
-  - FolioReaderKit (1.4.10.2):
+  - BitByteData (1.4.4)
+  - FolioReaderKit (1.4.13):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
     - MenuItemKit (= 3.1.3)
-    - SWCompression (= 4.5.1)
+    - SWCompression (= 4.5.10)
   - FontBlaster (4.1.0)
   - MenuItemKit (3.1.3)
   - Nimble (7.3.1)
   - Quick (1.3.2)
-  - SWCompression (4.5.1):
-    - BitByteData (~> 1.4.0)
-    - SWCompression/BZip2 (= 4.5.1)
-    - SWCompression/Deflate (= 4.5.1)
-    - SWCompression/GZip (= 4.5.1)
-    - SWCompression/LZMA (= 4.5.1)
-    - SWCompression/LZMA2 (= 4.5.1)
-    - SWCompression/SevenZip (= 4.5.1)
-    - SWCompression/TAR (= 4.5.1)
-    - SWCompression/XZ (= 4.5.1)
-    - SWCompression/ZIP (= 4.5.1)
-    - SWCompression/Zlib (= 4.5.1)
-  - SWCompression/BZip2 (4.5.1):
-    - BitByteData (~> 1.4.0)
-  - SWCompression/Deflate (4.5.1):
-    - BitByteData (~> 1.4.0)
-  - SWCompression/GZip (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression (4.5.10):
+    - BitByteData (~> 1.4.4)
+    - SWCompression/BZip2 (= 4.5.10)
+    - SWCompression/Deflate (= 4.5.10)
+    - SWCompression/GZip (= 4.5.10)
+    - SWCompression/LZMA (= 4.5.10)
+    - SWCompression/LZMA2 (= 4.5.10)
+    - SWCompression/SevenZip (= 4.5.10)
+    - SWCompression/TAR (= 4.5.10)
+    - SWCompression/XZ (= 4.5.10)
+    - SWCompression/ZIP (= 4.5.10)
+    - SWCompression/Zlib (= 4.5.10)
+  - SWCompression/BZip2 (4.5.10):
+    - BitByteData (~> 1.4.4)
+  - SWCompression/Deflate (4.5.10):
+    - BitByteData (~> 1.4.4)
+  - SWCompression/GZip (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/Deflate
-  - SWCompression/LZMA (4.5.1):
-    - BitByteData (~> 1.4.0)
-  - SWCompression/LZMA2 (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression/LZMA (4.5.10):
+    - BitByteData (~> 1.4.4)
+  - SWCompression/LZMA2 (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/LZMA
-  - SWCompression/SevenZip (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression/SevenZip (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/LZMA2
-  - SWCompression/TAR (4.5.1):
-    - BitByteData (~> 1.4.0)
-  - SWCompression/XZ (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression/TAR (4.5.10):
+    - BitByteData (~> 1.4.4)
+  - SWCompression/XZ (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/LZMA2
-  - SWCompression/ZIP (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression/ZIP (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/Deflate
-  - SWCompression/Zlib (4.5.1):
-    - BitByteData (~> 1.4.0)
+  - SWCompression/Zlib (4.5.10):
+    - BitByteData (~> 1.4.4)
     - SWCompression/Deflate
 
 DEPENDENCIES:
@@ -55,7 +55,7 @@ DEPENDENCIES:
   - Quick (= 1.3.2)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - AEXML
     - BitByteData
     - FontBlaster
@@ -70,14 +70,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
-  BitByteData: 40d356e9ce103ae62f34b74ed76c746eb5cc783f
-  FolioReaderKit: 9be7b704fc4d1f958ea54a52c300dd5aadea9a0a
+  BitByteData: 50012554283a93b1e43e5e7b3ad00171e52589e9
+  FolioReaderKit: bb1e17290be3d3cf3b9a96e47d2eef49c70eb9b2
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
-  SWCompression: 02a231af1b1df08be91802df4986d328f2a7c906
+  SWCompression: 9f45075af7b7915ad5116364f81eab647414fed7
 
 PODFILE CHECKSUM: 27ab1fac998a63edc76004d8dd44cba189cff4ad
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

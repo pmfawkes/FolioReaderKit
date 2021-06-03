@@ -10,6 +10,7 @@ import UIKit
 import SafariServices
 import MenuItemKit
 import WebKit
+import os.log
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -95,7 +96,6 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
             webView?.scrollView.showsHorizontalScrollIndicator = false
             webView?.backgroundColor = .clear
             webView?.isOpaque = false
-            webView?.addObserver(self, forKeyPath: #keyPath(WKWebView.scrollView.contentSize), options: .new, context: nil)
             
             self.contentView.addSubview(webView!)
         }
@@ -124,7 +124,6 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     deinit {
         webView?.scrollView.delegate = nil
         webView?.navigationDelegate = nil
-        webView?.removeObserver(self, forKeyPath: #keyPath(WKWebView.scrollView.contentSize))
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -133,35 +132,6 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
 
         webView?.setupScrollDirection()
         webView?.frame = webViewFrame()
-    }
-
-    
-    private var repeatedCount = 0
-    private var lastContentSize: CGSize = .zero
-    private var didFinishNavigation = false
-    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        switch keyPath {
-        case "scrollView.contentSize":
-            guard let newSize = webView?.scrollView.contentSize else { return }
-            guard lastContentSize == newSize else {
-                lastContentSize = newSize
-                repeatedCount = 0
-                return
-            }
-            repeatedCount += 1
-            
-            // TODO: It's very hard to check if WKWebView has loaded all the resources, we use the hack from this post https://stackoverflow.com/questions/45677288/wkwebview-requires-delay-to-set-its-scrollviews-contentoffset-and-zoomscale-aft
-            // This solution is not guranteed to work all the time but 
-            guard repeatedCount >= 1 && didFinishNavigation else { return }
-            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                self.webViewDidFinishLoadingPage()
-//            }
-            repeatedCount = 0
-            didFinishNavigation = false
-        default:
-            break
-        }
     }
     
     func webViewFrame() -> CGRect {
@@ -194,7 +164,7 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     fileprivate func insertHighlights() {
         // Restore highlights
         guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
-            return 
+            return
         }
         
         let highlights = DBAPIManager.shared.getAllHighlight(byBookId: bookId, page: pageNumber)
@@ -210,6 +180,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     
     // MARK: - WKWebView Delegate
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) start")
+        }
         guard let webView = webView as? FolioReaderWebView else {
             return
         }
@@ -246,8 +219,14 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
                     self.webView?.createMenu(options: false)
                 })
 
+        if #available(iOS 14.0, *) {
+            os_log("document.readyState - start")
+        }
                 webView.js("document.readyState") { [weak self] (_, _) in
                     guard let self = self else { return }
+                    if #available(iOS 14.0, *) {
+                        os_log("\(#function) delegate.pageDidLoad")
+                    }
                     self.delegate?.pageDidLoad?(self)
                 }
 //            }
@@ -256,16 +235,25 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) start")
+        }
         let request = navigationAction.request
         let navigationType = navigationAction.navigationType
         
         guard let webView = webView as? FolioReaderWebView,
             let scheme = request.url?.scheme else {
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) .allow")
+            }
                 decisionHandler(.allow)
                 return
         }
 
         guard let url = request.url else {
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) request.url .cancel")
+            }
             decisionHandler(.cancel)
             return
         }
@@ -277,6 +265,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
 
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) highlight .cancel")
+            }
             decisionHandler(.cancel)
             return
         } else if scheme == "play-audio" {
@@ -306,6 +297,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
                 // Return to avoid crash
                 if (splitedPath.count <= 1 || splitedPath[1].isEmpty) {
                     decisionHandler(.allow)
+                    if #available(iOS 14.0, *) {
+                        os_log("\(#function) avoid crash .allow")
+                    }
                     return
                 }
 
@@ -331,6 +325,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
                 handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animated: true)
                 decisionHandler(.cancel)
                 return
+            }
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) bookprovider .allow")
             }
             decisionHandler(.allow)
             return
@@ -444,6 +441,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
     open func scrollPageToOffset(_ offset: CGFloat, animated: Bool) {
         let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0), CGPoint(x: 0, y: offset))
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) setContentOffset \(pageOffsetPoint)")
+            }
             self.webView?.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
         }
     }
@@ -458,16 +458,18 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0)
         )
-        print("1  \n\(#function) \nbottomOffset: \(bottomOffset)")
-        print("asdf - webView.scrollView: \(webView.scrollView)")
-        guard bottomOffset.forDirection(withConfiguration: readerConfig) >= 0 else { return }
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) - bottomOffset: \(bottomOffset)")
+            os_log("\(#function) - webView.scrollView: \(webView.scrollView)")
+        }
         
-        print("asdf - set content offset")
+        guard bottomOffset.forDirection(withConfiguration: readerConfig) >= 0 else { return }
         webView.scrollView.layoutIfNeeded()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             webView.scrollView.setContentOffset(bottomOffset, animated: false)
-            print("asdf - content offset: \(webView.scrollView.contentOffset)")
-            print("\n")
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) content offset: \(webView.scrollView.contentOffset)")
+            }
         }
         
     }
@@ -593,5 +595,11 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
         for listener in self.readerConfig.classBasedOnClickListeners {
             self.webView?.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
         }
+    }
+}
+
+extension CGPoint: CustomStringConvertible {
+    public var description: String {
+        return "x:\(x) y\(y)"
     }
 }

@@ -9,6 +9,7 @@
 import UIKit
 import AEXML
 import SWCompression
+import os.log
 
 class FREpubParser: NSObject {
 
@@ -99,6 +100,9 @@ class FREpubParser: NSObject {
             let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyData.sha256(data: keyData) as NSData)
             guard let decryptedEpubData = try decryptor.decrypt() else { throw FolioReaderError.decrpytionFailed }
             
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) ZipContainer.open")
+            }
             bookZipEntries = try ZipContainer.open(container: decryptedEpubData)
             
             resourcesBasePath = "bookprovider://localHostBooks/\(bookName)/"
@@ -106,7 +110,7 @@ class FREpubParser: NSObject {
             try readContainer()
             try readOpf()
         } catch {
-            print(error.localizedDescription)
+            os_log("%@", error.localizedDescription)
         }
         
         return self.book

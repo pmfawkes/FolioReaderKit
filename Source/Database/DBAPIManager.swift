@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 class DBAPIManager: NSObject {
     
@@ -27,16 +28,25 @@ class DBAPIManager: NSObject {
     
     override init() {
         super.init()
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) connectLocalDatabase")
+        }
         self.connectLocalDatabase()
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) createTablesIfNeeded")
+        }
         self.createTablesIfNeeded()
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) success")
+        }
     }
     
     private func connectLocalDatabase() {
         do {
             dbHandler = try SQLiteDatabase.open(path: databasePath)
-            print("Successfully opened connection to database.")
+            os_log("Successfully opened connection to database.")
         } catch {
-            print("Unable to open database. Verify that you created the directory described in the Getting Started section.")
+            os_log("Unable to open database. Verify that you created the directory described in the Getting Started section.")
         }
     }
     
@@ -44,7 +54,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.createTable(table: Highlight.self)
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -56,7 +66,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.addHighlight(highlight)
         } catch {
-            print("can't insert highlight")
+            os_log("can't insert highlight")
         }
     }
     
@@ -69,7 +79,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.updateHighlight(id: id, type: type.rawValue)
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -82,7 +92,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.updateHighLight(id: id, note: note)
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -94,7 +104,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.removeHighlight(id: id)
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -108,7 +118,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getHighlight(id: id)
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
             return nil
         }
     }
@@ -123,7 +133,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getAllHighlights(byBookId: id, page: page) ?? []
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
             return []
         }
         
@@ -136,7 +146,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getAllHighlights() ?? []
         } catch {
-            print(dbHandler?.errorMessage ?? "")
+            os_log("%@", dbHandler?.errorMessage ?? "")
             return []
         }
     }

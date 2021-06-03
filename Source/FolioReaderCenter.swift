@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import os.log
+
 //import ZFDragableModalTransition
 public extension Notification.Name {
     static let pageDidLoadNotification = Notification.Name("pageDidAppearNotif")
@@ -501,7 +503,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
             html = modifiedHtmlContent
         }
-
+        
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref).deletingLastPathComponent())
         return cell
     }
@@ -662,6 +664,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             } else {
                 strongSelf.pageIndicatorView?.totalMinutes = 0
             }
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) pagesForCurrentPage")
+            }
             strongSelf.pagesForCurrentPage(currentPage)
 
             strongSelf.delegate?.pageDidAppear?(currentPage)
@@ -672,15 +677,27 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) start")
+        }
         guard let page = page, let webView = page.webView else { return }
-
+        
         let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
         let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0
         self.pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
-
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) - page size: \(pageSize)")
+            os_log("\(#function) - contentSize: \(contentSize)")
+            os_log("\(#function) - total pages: \(self.pageIndicatorView?.totalPages ?? 0)")
+            os_log("\(#function) - scrollView.contentOffset: \(webView.scrollView.contentOffset)")
+        }
+        
         let pageOffSet = self.readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
 
+        if #available(iOS 14.0, *) {
+            os_log("\(#function) - pageOffSet: \(pageOffSet)")
+        }
         self.pageIndicatorView?.currentPage = webViewPage
     }
 

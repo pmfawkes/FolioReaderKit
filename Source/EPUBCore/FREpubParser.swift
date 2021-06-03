@@ -119,7 +119,7 @@ class FREpubParser: NSObject {
                 os_log("\(#function) finish")
             }
         } catch {
-            os_log("readEpub error: %@", error.localizedDescription)
+            os_log("readEpub error: %{public}@", error.localizedDescription)
         }
         
         return self.book

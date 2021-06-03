@@ -107,10 +107,19 @@ class FREpubParser: NSObject {
             
             resourcesBasePath = "bookprovider://localHostBooks/\(bookName)/"
             book.baseURL = URL(string: "bookprovider:/localHostBooks/\(bookName)/")!
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) readContainer")
+            }
             try readContainer()
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) readOpf")
+            }
             try readOpf()
+            if #available(iOS 14.0, *) {
+                os_log("\(#function) finish")
+            }
         } catch {
-            os_log("%@", error.localizedDescription)
+            os_log("readEpub error: %@", error.localizedDescription)
         }
         
         return self.book

@@ -782,7 +782,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         UIView.animate(withDuration: animated ? 0.3 : 0, delay: 0, options: UIView.AnimationOptions(), animations: { () -> Void in
+            self.collectionView.isPagingEnabled = false
             self.collectionView.scrollToItem(at: indexPath, at: .direction(withConfiguration: self.readerConfig), animated: false)
+            self.collectionView.isPagingEnabled = true
         }) { (finished: Bool) -> Void in
             completion?()
         }

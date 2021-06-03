@@ -100,24 +100,12 @@ class FREpubParser: NSObject {
             let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyData.sha256(data: keyData) as NSData)
             guard let decryptedEpubData = try decryptor.decrypt() else { throw FolioReaderError.decrpytionFailed }
             
-            if #available(iOS 14.0, *) {
-                os_log("\(#function) ZipContainer.open")
-            }
             bookZipEntries = try ZipContainer.open(container: decryptedEpubData)
             
             resourcesBasePath = "bookprovider://localHostBooks/\(bookName)/"
             book.baseURL = URL(string: "bookprovider:/localHostBooks/\(bookName)/")!
-            if #available(iOS 14.0, *) {
-                os_log("\(#function) readContainer")
-            }
             try readContainer()
-            if #available(iOS 14.0, *) {
-                os_log("\(#function) readOpf")
-            }
             try readOpf()
-            if #available(iOS 14.0, *) {
-                os_log("\(#function) finish")
-            }
         } catch {
             os_log("readEpub error: %{public}@", error.localizedDescription)
         }

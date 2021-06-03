@@ -28,17 +28,8 @@ class DBAPIManager: NSObject {
     
     override init() {
         super.init()
-        if #available(iOS 14.0, *) {
-            os_log("\(#function) connectLocalDatabase")
-        }
         self.connectLocalDatabase()
-        if #available(iOS 14.0, *) {
-            os_log("\(#function) createTablesIfNeeded")
-        }
         self.createTablesIfNeeded()
-        if #available(iOS 14.0, *) {
-            os_log("\(#function) success")
-        }
     }
     
     private func connectLocalDatabase() {
@@ -54,7 +45,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.createTable(table: Highlight.self)
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("createTablesIfNeeded error: %@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -66,7 +57,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.addHighlight(highlight)
         } catch {
-            os_log("can't insert highlight")
+            os_log("addHighlight error: can't insert highlight")
         }
     }
     
@@ -79,7 +70,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.updateHighlight(id: id, type: type.rawValue)
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("updateHighlight error: %@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -92,7 +83,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.updateHighLight(id: id, note: note)
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("updateHighlight error: %@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -104,7 +95,7 @@ class DBAPIManager: NSObject {
         do {
             try dbHandler?.removeHighlight(id: id)
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("removeHighlight error: %@", dbHandler?.errorMessage ?? "")
         }
     }
     
@@ -118,7 +109,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getHighlight(id: id)
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("getHighlight error: %@", dbHandler?.errorMessage ?? "")
             return nil
         }
     }
@@ -133,7 +124,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getAllHighlights(byBookId: id, page: page) ?? []
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("getAllHighlight error: %@", dbHandler?.errorMessage ?? "")
             return []
         }
         
@@ -146,7 +137,7 @@ class DBAPIManager: NSObject {
         do {
             return try dbHandler?.getAllHighlights() ?? []
         } catch {
-            os_log("%@", dbHandler?.errorMessage ?? "")
+            os_log("getAllHighlights error: %@", dbHandler?.errorMessage ?? "")
             return []
         }
     }

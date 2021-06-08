@@ -107,7 +107,7 @@ class FREpubParser: NSObject {
             try readContainer()
             try readOpf()
         } catch {
-            os_log("readEpub error: %{public}@", error.localizedDescription)
+            os_log("readEpub error: %{public}@", type: .error, error.localizedDescription)
         }
         
         return self.book

@@ -35,6 +35,6 @@ Pod::Spec.new do |s|
   s.dependency 'MenuItemKit', '3.1.3'
   s.dependency 'AEXML', '4.3.3'
   s.dependency 'FontBlaster', '4.1.0'
-  s.dependency 'SWCompression', '4.5.1'
+  s.dependency 'SWCompression', '4.5.10'
 
 end

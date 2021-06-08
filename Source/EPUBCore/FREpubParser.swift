@@ -9,6 +9,7 @@
 import UIKit
 import AEXML
 import SWCompression
+import os.log
 
 class FREpubParser: NSObject {
 
@@ -106,7 +107,7 @@ class FREpubParser: NSObject {
             try readContainer()
             try readOpf()
         } catch {
-            print(error.localizedDescription)
+            os_log("readEpub error: %{public}@", type: .error, error.localizedDescription)
         }
         
         return self.book

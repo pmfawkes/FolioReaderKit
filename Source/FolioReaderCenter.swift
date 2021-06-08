@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import os.log
+
 //import ZFDragableModalTransition
 public extension Notification.Name {
     static let pageDidLoadNotification = Notification.Name("pageDidAppearNotif")
@@ -501,7 +503,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
             html = modifiedHtmlContent
         }
-
+        
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref).deletingLastPathComponent())
         return cell
     }
@@ -673,14 +675,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
         guard let page = page, let webView = page.webView else { return }
-
+        
         let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
         let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0
         self.pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
-
+        
         let pageOffSet = self.readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
-
+        
         self.pageIndicatorView?.currentPage = webViewPage
     }
 
@@ -782,7 +784,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         UIView.animate(withDuration: animated ? 0.3 : 0, delay: 0, options: UIView.AnimationOptions(), animations: { () -> Void in
+            self.collectionView.isPagingEnabled = false
             self.collectionView.scrollToItem(at: indexPath, at: .direction(withConfiguration: self.readerConfig), animated: false)
+            self.collectionView.isPagingEnabled = true
         }) { (finished: Bool) -> Void in
             completion?()
         }

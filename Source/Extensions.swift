@@ -70,12 +70,8 @@ func delay(_ delay:Double, closure:@escaping ()->()) {
 // MARK: - Extensions
 
 internal extension Bundle {
-    class func frameworkBundle() -> Bundle {
-        guard let path = Bundle(for: FolioReader.self).path(forResource: "FolioReader", ofType: "bundle"),
-            let bundle = Bundle(path: path) else {
-                return Bundle(for: FolioReader.self)
-        }
-        return bundle
+    static var frameworkBundle: Bundle {
+        return Bundle.module
     }
 }
 
@@ -340,7 +336,7 @@ internal extension String {
 internal extension UIImage {
     
     convenience init?(readerImageNamed: String) {
-        self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
+        self.init(named: readerImageNamed, in: Bundle.frameworkBundle, compatibleWith: nil)
     }
     
     /// Forces the image to be colored with Reader Config tintColor

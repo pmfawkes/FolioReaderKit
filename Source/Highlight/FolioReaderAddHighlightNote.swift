@@ -26,7 +26,7 @@ class FolioReaderAddHighlightNote: UIViewController {
         self.highlight = highlight
         self.readerConfig = readerConfig
         
-        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -35,7 +35,7 @@ class FolioReaderQuoteShare: UIViewController {
         self.quoteText = shareText.stripLineBreaks().stripHtml()
         self.book = book
 
-        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle)
     }
 
     required init?(coder aDecoder: NSCoder) {

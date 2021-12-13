@@ -70,7 +70,7 @@ func delay(_ delay:Double, closure:@escaping ()->()) {
 // MARK: - Extensions
 
 internal extension Bundle {
-    class func frameworkBundle() -> Bundle {
+    static var frameworkBundle: Bundle {
         return Bundle.module
     }
 }
@@ -336,7 +336,7 @@ internal extension String {
 internal extension UIImage {
     
     convenience init?(readerImageNamed: String) {
-        self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
+        self.init(named: readerImageNamed, in: Bundle.frameworkBundle, compatibleWith: nil)
     }
     
     /// Forces the image to be colored with Reader Config tintColor

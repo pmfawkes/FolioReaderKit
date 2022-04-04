@@ -474,8 +474,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
 
         // Inject CSS
-        let jsFilePath = Bundle.frameworkBundle.url(forResource: "Bridge", withExtension: "js")?.absoluteString
-        let cssFilePath = Bundle.frameworkBundle.url(forResource: "Style", withExtension: "css")?.absoluteString
+        let jsFilePath = Bundle.frameworkBundle.url(forResource: "Bridge", withExtension: "js")?.path
+        let cssFilePath = Bundle.frameworkBundle.url(forResource: "Style", withExtension: "css")?.path
         let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
         let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
         "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
@@ -501,8 +501,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
             html = modifiedHtmlContent
         }
-
-        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref).deletingLastPathComponent())
         return cell
     }
 

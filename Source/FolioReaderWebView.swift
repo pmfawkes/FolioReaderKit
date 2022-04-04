@@ -34,7 +34,7 @@ open class FolioReaderWebView: WKWebView {
     init(frame: CGRect, readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
         let configuration = WKWebViewConfiguration()
-        configuration.setURLSchemeHandler(BookProvider(), forURLScheme: "bookprovider")
+        configuration.setURLSchemeHandler(BookProvider.shared, forURLScheme: "bookprovider")
         super.init(frame: frame, configuration: configuration)
     }
 
